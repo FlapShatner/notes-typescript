@@ -14,7 +14,7 @@ const SelectBox = () => {
 
   return (
     <div className='flex basis-1/2'>
-    <Select styles={{
+    <Select isMulti styles={{
       container: (base) => ({
         ...base,
         width: '100%'
