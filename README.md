@@ -31,5 +31,6 @@ Now open a web page to http://localhost:3000 to start it up.
 ### Author
 
 Jordan Roberts
-[Github](https://github.com/FlapShatner)
+
+[My Github](https://github.com/FlapShatner)
 
