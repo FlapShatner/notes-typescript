@@ -23,6 +23,7 @@ const SelectBox = () => {
         ...base,
         borderRadius: '0.375rem'
       })
+           
     }} options={options}/>
     </div>
   )

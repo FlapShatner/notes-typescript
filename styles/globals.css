@@ -55,6 +55,10 @@ h6 {
   overflow-wrap: break-word;
 }
 
+input:focus {
+  box-shadow: none !important;
+}
+
 #root,
 #__next {
   isolation: isolate;
