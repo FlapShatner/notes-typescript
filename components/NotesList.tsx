@@ -1,57 +1,20 @@
 import Card from "./Card"
 
 
+import { Note, Tag} from '../pages/create'
 
-const NotesList = () => {
+type Props = {
+    notes: Note[]
+    tags:Tag[]
+}
+
+
+const NotesList: React.FC<Props> = ({notes, tags}) => {
     
 
-    const notes = [
-        {
-        id: 'one',
-        title:'First',
-        markdown:'Some markdown here',
-        tagIds: [1]
-    },
-    {
-        id: 'two',
-        title:'Second',
-        markdown:'Some markdown here',
-        tagIds: [1,2]
-    },
-    {
-        id: 'three',
-        title:'Third',
-        markdown:'Some markdown here',
-        tagIds: [1,2,3]
-    },
-    {
-        id: 'four',
-        title:'Fourth',
-        markdown:'Some markdown here',
-        tagIds: [1,2,3,4]
-    },    
-]
-
-const tags = [
-    {
-        id:'one',
-        value:'tag1'
-    },
-    {
-        id:'two',
-        value:'tag2'
-    },
-    {
-        id:'three',
-        value:'tag3'
-    },
-    {
-        id:'four',
-        value:'tag4'
-    },
-]
-
-
+if(!notes){
+    return <h3>loading...</h3>
+}
 
   return (
     <>

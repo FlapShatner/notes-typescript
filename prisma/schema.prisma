@@ -16,21 +16,22 @@ model Note {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String  @db.VarChar(255)
-  markdown   String @db.Text
+  markdown   String? @db.Text
   tags      Tag[]
-  author    User  @relation(fields: [authorId], references: [id])
-  authorId  Int
+  // author    User  @relation(fields: [authorId], references: [id])
+  // authorId  Int
 }
 
 model Tag {
   id        Int      @id @default(autoincrement())
-  name      String  @db.VarChar(255)
+  uuid      String  @db.VarChar(255)
+  label      String  @db.VarChar(255)
   notes     Note[]
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String  @db.VarChar(255)
-  password  String  @db.VarChar(255)
-  notes     Note[]  
-}
+// model User {
+//   id        Int      @id @default(autoincrement())
+//   email     String  @db.VarChar(255)
+//   password  String  @db.VarChar(255)
+//   notes     Note[]  
+// }

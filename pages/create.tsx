@@ -2,10 +2,14 @@ import Link from "next/link"
 import { useMemo } from "react"
 import NoteForm from "../components/NoteForm"
 import { useLocalStorage } from "../hooks/useLocalStorage"
-import {v4 as uuidV4 } from "uuid"
+import Router from "next/router"
+import { GetServerSideProps } from "next"
+import prisma from "../lib/prisma"
+import { makeSerializable } from "../lib/util"
+
 
 export type Note ={
-  id:string   
+  id: number  
 } & NoteData
 
 export type NoteData = {
@@ -15,38 +19,73 @@ export type NoteData = {
 }
 
 export type RawNote = {
-  id:string  
+  id:number  
 } & RawNoteData
 
 export type RawNoteData = {
   title: string
   markdown:string
-  tagsIds: string[]
+  tags:Tag[]
+  newTags:TagLabel[]
 }
 
-export type Tag = {
-  id:string
+export type TagLabel = {
   label:string
 }
 
-function Create() {
-  const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", [])
-  const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", [])
+export type Tag = {
+  id:number
+  label:string
+}
 
-  const notesWithTags = useMemo(() => {
-    return notes.map(note => {
-      return {...note, tags: tags.filter(tag => note.tagsIds.includes(tag.id))}
-    })
-  },[notes, tags])
+function Create({tags}) {
+  // const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", [])
+  // const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", [])
 
-  function onCreateNote({tags, ...data}: NoteData) {
-    setNotes(prev => {
-      return [...prev, { ...data, id: uuidV4(), tagsIds:tags.map(tag => tag.id)}]
-    })
+  // const notesWithTags = useMemo(() => {
+  //   return notes.map(note => {
+  //     return {...note, tags: tags.filter(tag => note.tagsIds.includes(tag.id))}
+  //   })
+  // },[notes, tags])
+
+  // function onCreateNote({tags, ...data}: NoteData) {
+  //   setNotes(prev => {
+  //     return [...prev, { ...data, id: uuidV4(), tagsIds:tags.map(tag => tag.id)}]
+  //   })
+  // }
+
+  async function onCreateNote({title, markdown, tags}: NoteData){
+    
+    try{
+      const body = {title:title, markdown: markdown, tags: tags}
+      await fetch('/api/content/post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify(body)
+      })
+      await Router.push('/')
+    } catch (error) {
+      console.error(error)
+    }
   }
 
-  function addTag(tag:Tag){
-    setTags(prev => [...prev, tag])
+  
+  
+  
+
+  async function addTag({label}:TagLabel){
+    // setTags(prev => [...prev, tag])
+  
+    try{
+      const body = {label:label}
+      await fetch('api/content/tag', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body)
+      })
+    } catch (error){
+      console.error(error)
+    }
   }
 
   return (
@@ -78,4 +117,15 @@ function Create() {
   )
 }
 
+export const getServerSideProps: GetServerSideProps = async () => {
+  const tags = await prisma.tag.findMany()
+
+  return {
+    props: {tags: makeSerializable(tags)}
+  }
+}
+
+
+
 export default Create
+

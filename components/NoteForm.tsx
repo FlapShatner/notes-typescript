@@ -1,13 +1,13 @@
 import CreatableSelect from 'react-select/Creatable'
 import Link from 'next/link'
 import { useRef, FormEvent, useState } from 'react'
-import { NoteData, Tag } from '../pages/create'
-import {v4 as uuidV4} from "uuid"
+import { RawNoteData, Tag, TagLabel } from '../pages/create'
+
 
 
 type NoteFormProps = {
-    onSubmit: (data: NoteData) => void
-    onAddTag: (tag:Tag) => void
+    onSubmit: (data: RawNoteData) => void
+    onAddTag: (tag:TagLabel) => void
     availableTags: Tag[]
 }
 
@@ -15,17 +15,19 @@ const NoteForm = ({onSubmit, onAddTag, availableTags}: NoteFormProps) => {
     const titleRef = useRef<HTMLInputElement>(null)
     const markdownRef = useRef<HTMLTextAreaElement>(null)
     const [selectedTags, setSelectedTags] = useState<Tag[]>([])
+    const [newTags, setNewTags] = useState<TagLabel[]>([])
 
     function handleSubmit(e: FormEvent){
         e.preventDefault()
         onSubmit({
             title: titleRef.current!.value,
             markdown: markdownRef.current!.value,
-            tags: []
+            tags: selectedTags,
+            newTags: newTags
         })
     }
 
-  
+  console.log(availableTags)
 
   return (
     <>
@@ -41,9 +43,9 @@ const NoteForm = ({onSubmit, onAddTag, availableTags}: NoteFormProps) => {
           <div className='flex basis-1/2'>
             <CreatableSelect
               onCreateOption={label => {
-                const newTag = {id: uuidV4(), label}
-                onAddTag(newTag)
-                setSelectedTags(prev => [...prev, newTag])
+                const createdTag = {label: label}
+                onAddTag(createdTag)
+                setNewTags(newTags => [...newTags, createdTag])
               }}
                 value={selectedTags.map(tag => {
                     return {label:tag.label, value:tag.id}

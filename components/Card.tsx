@@ -1,24 +1,14 @@
 import Link from "next/link"
+import { Note, Tag } from "../pages/create"
 
 
-type Tag = {
-    id:string
-    value:string
-}
-
-type Note ={
-    id:string
-    title:string
-    markdown:string    
-}
-
-type CardProps = {
+export type CardProps = {
     note: Note
     tags:Tag[] | null
 }
 
 const Card = ({note, tags} : CardProps) => {
-    const {title, } = note
+    const {title } = note
 
 
   return (
@@ -28,6 +18,7 @@ const Card = ({note, tags} : CardProps) => {
 
   <div className="mt-2 text-gray-500 ">
     <h3 className="mt-2 text-xl font-bold text-gray-900">{title}</h3>
+   
     <div className="flex flex-wrap gap-2 mt-4 justify-end">
 
        
