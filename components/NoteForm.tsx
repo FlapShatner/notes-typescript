@@ -8,18 +8,31 @@ type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
   onAddTag: (tag: Tag) => void;
   availableTags: Tag[];
+  note?: NoteData
 };
 
-const NoteForm = ({ onSubmit, onAddTag, availableTags }: NoteFormProps) => {
-  const titleRef = useRef<HTMLInputElement>(null);
-  const markdownRef = useRef<HTMLTextAreaElement>(null);
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) => {
+  const existingTags = note?.tags ?? []
+  const existingTitle = note?.title ?? null
+  const existingMarkdown = note?.markdown ?? null  
+
+  const [title, setTitle] = useState<string>(existingTitle)
+  const [markdown, setMarkdown] = useState<string>(existingMarkdown)
+
+  const [selectedTags, setSelectedTags] = useState<Tag[]>(existingTags);
+
+  function handleMarkdownChange(e){
+    setMarkdown(e.target.value)
+  }
+  function handleTitleChange(e){
+    setTitle(e.target.value)
+  }
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     onSubmit({
-      title: titleRef.current!.value,
-      markdown: markdownRef.current!.value,
+      title: title,
+      markdown: markdown,
       tags: selectedTags,
     });
   }
@@ -33,7 +46,8 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags }: NoteFormProps) => {
               Title
             </label>
             <input
-              ref={titleRef}
+              onChange={handleTitleChange}
+              value={title}
               required
               type="text"
               id="title"
@@ -49,6 +63,9 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags }: NoteFormProps) => {
                 onAddTag(createdTag);
                 setSelectedTags((prev) => [...prev, createdTag]);
               }}
+              defaultValue={existingTags.map((tag) => {
+                return { label: tag.label, value: tag.uuid };
+              })}
               value={selectedTags.map((tag) => {
                 return { label: tag.label, value: tag.uuid };
               })}
@@ -77,7 +94,8 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags }: NoteFormProps) => {
           </div>
         </div>
         <textarea
-          ref={markdownRef}
+          onChange={handleMarkdownChange}
+          value={markdown}
           rows={15}
           className="mt-10 w-full rounded-md border-gray-300 pr-10 shadow-sm"
           required
