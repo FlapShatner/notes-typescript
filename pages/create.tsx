@@ -1,7 +1,5 @@
 import Link from "next/link"
-import { useMemo } from "react"
 import NoteForm from "../components/NoteForm"
-import { useLocalStorage } from "../hooks/useLocalStorage"
 import Router from "next/router"
 import { GetServerSideProps } from "next"
 import prisma from "../lib/prisma"
@@ -18,41 +16,12 @@ export type NoteData = {
   tags: Tag[]
 }
 
-export type RawNote = {
-  id:number  
-} & RawNoteData
-
-export type RawNoteData = {
-  title: string
-  markdown:string
-  tags:Tag[]
-  newTags:TagLabel[]
-}
-
-export type TagLabel = {
-  label:string
-}
-
 export type Tag = {
-  id:number
-  label:string
+  uuid: string
+  label: string
 }
 
 function Create({tags}) {
-  // const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", [])
-  // const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", [])
-
-  // const notesWithTags = useMemo(() => {
-  //   return notes.map(note => {
-  //     return {...note, tags: tags.filter(tag => note.tagsIds.includes(tag.id))}
-  //   })
-  // },[notes, tags])
-
-  // function onCreateNote({tags, ...data}: NoteData) {
-  //   setNotes(prev => {
-  //     return [...prev, { ...data, id: uuidV4(), tagsIds:tags.map(tag => tag.id)}]
-  //   })
-  // }
 
   async function onCreateNote({title, markdown, tags}: NoteData){
     
@@ -70,14 +39,11 @@ function Create({tags}) {
   }
 
   
-  
-  
-
-  async function addTag({label}:TagLabel){
-    // setTags(prev => [...prev, tag])
+  async function addTag({label, uuid}:Tag){
+    
   
     try{
-      const body = {label:label}
+      const body = {label:label, uuid:uuid}
       await fetch('api/content/tag', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
