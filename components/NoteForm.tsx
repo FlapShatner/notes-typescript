@@ -1,13 +1,13 @@
 import CreatableSelect from 'react-select/Creatable'
 import Link from 'next/link'
 import { useRef, FormEvent, useState } from 'react'
-import { RawNoteData, Tag, TagLabel } from '../pages/create'
-
+import { NoteData, Tag } from '../pages/create'
+import {v4 as uuidV4} from 'uuid'
 
 
 type NoteFormProps = {
-    onSubmit: (data: RawNoteData) => void
-    onAddTag: (tag:TagLabel) => void
+    onSubmit: (data: NoteData) => void
+    onAddTag: (tag:Tag) => void
     availableTags: Tag[]
 }
 
@@ -15,19 +15,18 @@ const NoteForm = ({onSubmit, onAddTag, availableTags}: NoteFormProps) => {
     const titleRef = useRef<HTMLInputElement>(null)
     const markdownRef = useRef<HTMLTextAreaElement>(null)
     const [selectedTags, setSelectedTags] = useState<Tag[]>([])
-    const [newTags, setNewTags] = useState<TagLabel[]>([])
+    
 
     function handleSubmit(e: FormEvent){
         e.preventDefault()
         onSubmit({
             title: titleRef.current!.value,
             markdown: markdownRef.current!.value,
-            tags: selectedTags,
-            newTags: newTags
+            tags: selectedTags            
         })
     }
 
-  console.log(availableTags)
+  
 
   return (
     <>
@@ -43,16 +42,16 @@ const NoteForm = ({onSubmit, onAddTag, availableTags}: NoteFormProps) => {
           <div className='flex basis-1/2'>
             <CreatableSelect
               onCreateOption={label => {
-                const createdTag = {label: label}
+                const createdTag = {uuid: uuidV4(), label: label}
                 onAddTag(createdTag)
-                setNewTags(newTags => [...newTags, createdTag])
+                setSelectedTags(prev => [...prev, createdTag])
               }}
                 value={selectedTags.map(tag => {
-                    return {label:tag.label, value:tag.id}
+                    return {label:tag.label, value:tag.uuid}
                 })}
                 onChange={tags => {
                     setSelectedTags(tags.map(tag => {
-                        return { label:tag.label, id:tag.value}
+                        return { label:tag.label, uuid:tag.value}
                     }))
                 }}
               isMulti
@@ -67,7 +66,7 @@ const NoteForm = ({onSubmit, onAddTag, availableTags}: NoteFormProps) => {
                 }),
               }}
               options={availableTags.map(tag => {
-                return { label: tag.label, value: tag.id}
+                return { label: tag.label, value: tag.uuid}
               })}
             />
           </div>
