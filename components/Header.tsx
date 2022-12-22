@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 function Header() {
   return (
     <header aria-label="Page Header">
@@ -19,12 +18,14 @@ function Header() {
                 Create
               </button>
             </Link>
-            <button
-              className="inline-flex items-center justify-center rounded-lg border border-indigo-400 px-5 py-3 text-indigo-500 transition hover:bg-indigo-50 hover:text-indigo-700 focus:outline-none focus:ring font-medium text-sm"
-              type="button"
-            >
-              Edit Tags
-            </button>
+            <Link href="/tags">
+              <button
+                className="inline-flex items-center justify-center rounded-lg border border-indigo-400 px-5 py-3 text-indigo-500 transition hover:bg-indigo-50 hover:text-indigo-700 focus:outline-none focus:ring font-medium text-sm"
+                type="button"
+              >
+                Edit Tags
+              </button>
+            </Link>
           </div>
         </div>
       </div>

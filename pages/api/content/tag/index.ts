@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../lib/prisma";
-import { Tag } from "../../create";
+import prisma from "../../../../lib/prisma";
+import { Tag } from "../../../create";
 
 // POST /api/content/tag
 

@@ -1,4 +1,5 @@
 import { Note, Tag } from "../pages/create";
+import { useState } from "react";
 import Header from "../components/Header";
 import NotesList from "../components/NotesList";
 import { GetServerSideProps } from "next";
@@ -13,6 +14,8 @@ type Props = {
 };
 
 export default function Home({ notes, allTags }: Props) {
+
+
   return (
     <>
       <div className="container mx-auto max-w-screen-xl">
@@ -30,8 +33,6 @@ export default function Home({ notes, allTags }: Props) {
 export const getServerSideProps: GetServerSideProps = async () => {
   const notes = await prisma.note.findMany({ include: { tags: true } });
   const allTags = await prisma.tag.findMany();
-
- 
 
   return {
     props: { notes: makeSerializable(notes), allTags: makeSerializable(allTags) },
