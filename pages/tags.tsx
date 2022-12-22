@@ -13,10 +13,27 @@ type EditProps = {
 type FieldProps = {
   tag: Tag;
   setIsDone: () => void
+  deleteTag: (tag: Tag) => void
 };
 
 function EditTags({ allTags }: EditProps) {
+    const [localTags, setLocalTags] = useState(allTags)
     const [isDone, setIsDone] = useState(false)
+
+    const deleteTag = async (tag:Tag) => {
+        try {
+            const uuid = tag.uuid
+            await fetch(`api/content/tag/${uuid}`, {
+                method: "DELETE",
+                headers:{"Content-Type": "application/json"},                
+            })
+            
+            setLocalTags(localTags.filter(tag => tag.uuid !== uuid))
+        } catch (error){
+            console.error(error)
+        }
+    }
+
   return (
     <div className="flex justify-center items-start pt-20 overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-white">
       <div className="relative w-full h-full max-w-sm md:h-auto">
@@ -36,9 +53,9 @@ function EditTags({ allTags }: EditProps) {
               </Link>
             </div>
             <div className="mt-4 flex flex-col  gap-1">
-              {allTags &&
-                allTags.map((tag) => {
-                  return <TagField key={tag.uuid} setIsDone={() => setIsDone(true)} tag={tag} />;
+              {localTags &&
+                localTags.map((tag) => {
+                  return <TagField key={tag.uuid} deleteTag={() => deleteTag(tag)} setIsDone={() => setIsDone(true)} tag={tag} />;
                 })}
             </div>
           </div>
@@ -48,7 +65,7 @@ function EditTags({ allTags }: EditProps) {
   );
 }
 
-function TagField({ tag, setIsDone }: FieldProps) {
+function TagField({ tag, setIsDone, deleteTag }: FieldProps) {
     const [label, setLabel] = useState(tag.label)
     const [isEdit, setIsEdit] = useState(false)
     
@@ -73,6 +90,7 @@ function TagField({ tag, setIsDone }: FieldProps) {
         setIsDone()
     }
 
+
   return (
     <div
       key={tag.uuid}
@@ -89,7 +107,7 @@ function TagField({ tag, setIsDone }: FieldProps) {
         { isEdit && <button onClick={saveChange} type="button" className="h-full text-xs px-3 hover:bg-green-200">
           Save
         </button>}
-        <button type="button" className="h-full text-lg px-3 hover:bg-red-200">
+        <button onClick={() => deleteTag(tag)} type="button" className="h-full text-lg px-3 hover:bg-red-200">
           &times;
         </button>
       </div>

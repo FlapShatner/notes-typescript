@@ -1,14 +1,23 @@
-const SearchInput = () => {
+type SearchProps = {
+  query:string
+  setQuery:(query:string) => void
+}
+
+const SearchInput = ({query, setQuery}: SearchProps) => {
+
+
+
   return (
     <div className="relative flex basis-1/2">
       <label htmlFor="search" className="sr-only">
-        {" "}
-        Search{" "}
+        Filter by Title 
       </label>
       <input
+      value={query}
+      onChange={e => setQuery(e.target.value)}
         type="text"
         id="search"
-        placeholder="Search Titles"
+        placeholder="Filter by Title"
         className="w-full rounded-md border-gray-300 pr-10 shadow-sm text-sm"
       />
 
