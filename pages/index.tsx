@@ -16,7 +16,7 @@ export default function Home({ notes, allTags }: Props) {
   return (
     <>
       <div className="container mx-auto max-w-screen-xl">
-        <Header />
+        <Header allTags={allTags}/>
         <div className="lg:mx-20 mx-4 gap-2 md:gap-6 flex flex-row">
         <SearchInput />
         <SelectBox allTags={allTags}/>
