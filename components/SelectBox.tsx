@@ -1,11 +1,19 @@
 import Select from "react-select";
+import { Tag } from "../pages/create";
 
-const SelectBox = ({allTags}) => {
+type Props = {
+  allTags:Tag[]
+  setSelectedTags:(tag:Tag[])=> void
+  selectedTags:Tag[]
+}
+
+const SelectBox = ({allTags, selectedTags ,setSelectedTags}:Props) => {
   
 
   return (
     <div className="flex basis-1/2">
       <Select
+      placeholder='Filter by tags'
         isMulti
         styles={{
           container: (base) => ({
@@ -17,7 +25,11 @@ const SelectBox = ({allTags}) => {
             borderRadius: "0.375rem",
           }),
         }}
-        options={allTags}
+        value={selectedTags.map(tag => {return{label:tag.label, value:tag.uuid}})}
+        onChange={tags => setSelectedTags(tags.map(tag => {
+          return {label:tag.label, uuid:tag.value}
+        }))}
+        options={allTags.map(tag => {return {label:tag.label, value:tag.uuid}})}
       />
     </div>
   );

@@ -63,7 +63,7 @@ function Read({note}:ReadProps) {
       </div>
     </header>
     <div className="py-10 px-4 mx-10 md:mx-20">
-    <ReactMarkdown  remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>{note.markdown}</ReactMarkdown>
+    <ReactMarkdown className="prose" remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>{note.markdown}</ReactMarkdown>
     </div>
 
     {show && <DeleteModal noteId={id} setShow={() => setShow(false)}/>}
