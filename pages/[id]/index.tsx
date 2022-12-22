@@ -23,16 +23,16 @@ function Read({note}:ReadProps) {
     const router = useRouter()
     const {id} = router.query
   return (
-    <div className="container mx-auto">
+    <div className="container max-w-screen-xl  mx-auto">
     <header aria-label="Page Header">
-      <div className="mx-auto max-w-screen-xl px-8 py-8 ">
-        <div className="sm:flex sm:items-center sm:justify-between">
+      <div className="mx-auto px-10 py-8 md:px-20 ">
+        <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-between">
           <div className="text-left">
-            <h1 className="text-3xl text-gray-900 sm:text-4xl font-medium">
+            <h1 className="text-3xl mt-4 md:mt-0 text-gray-900 sm:text-4xl font-medium">
               {note.title}
             </h1>
           </div>
-          <div className=" flex gap-4 mt-4 sm:mt-0 sm:flex-row sm:items-center justify-start">
+          <div className=" flex gap-4  md:flex-row sm:items-center justify-end">
             <Link href="..">
               <button
                 className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
@@ -62,7 +62,7 @@ function Read({note}:ReadProps) {
         </div>
       </div>
     </header>
-    <div className="py-10 px-4 lg:px-20">
+    <div className="py-10 px-4 mx-10 md:mx-20">
     <ReactMarkdown  remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>{note.markdown}</ReactMarkdown>
     </div>
 
