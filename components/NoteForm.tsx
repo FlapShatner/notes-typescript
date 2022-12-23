@@ -1,6 +1,7 @@
 import CreatableSelect from "react-select/Creatable";
 import Link from "next/link";
-import { useRef, FormEvent, useState } from "react";
+import {FormEvent, useState } from "react";
+import Markdown from "./Markdown";
 import { NoteData, Tag } from "../pages/create";
 import { v4 as uuidV4 } from "uuid";
 
@@ -15,6 +16,7 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) =>
   const existingTags = note?.tags ?? []
   const existingTitle = note?.title ?? null
   const existingMarkdown = note?.markdown ?? null  
+  const [useEditor, setUseEditor] = useState(true)
 
   const [title, setTitle] = useState<string>(existingTitle)
   const [markdown, setMarkdown] = useState<string>(existingMarkdown)
@@ -58,6 +60,7 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) =>
 
           <div className="flex basis-1/2">
             <CreatableSelect
+            placeholder='Add Tags'
               onCreateOption={(label) => {
                 const createdTag = { uuid: uuidV4(), label: label };
                 onAddTag(createdTag);
@@ -93,13 +96,21 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) =>
             />
           </div>
         </div>
-        <textarea
+        <div className="mt-2 flex justify-end">
+        <button className="text-black bg-gray-200 px-1" type="button"  onClick={() => setUseEditor(!useEditor)}>
+          {useEditor?'Use Plain Text Editor': 'Use Markdown Editor'}
+          </button>
+          </div>
+        {useEditor?
+        <Markdown markdown={markdown} onChange={handleMarkdownChange} />
+        :
+         <textarea
           onChange={handleMarkdownChange}
           value={markdown}
-          rows={15}
-          className="mt-10 w-full rounded-md border-gray-300 pr-10 shadow-sm"
+          rows={20}
+          className="mt-2 w-full rounded-md border-gray-300 pr-10 shadow-sm"
           required
-        />
+        /> }
 
         <div className="mt-2 flex flex-row gap-2 justify-end">
           <button
