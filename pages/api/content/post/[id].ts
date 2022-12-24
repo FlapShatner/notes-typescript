@@ -26,22 +26,24 @@ export default async function handle(
   const { title, markdown, tags }: NoteData = req.body;
   let connects = [];
 
-  if(tags){
-  for (let t of tags) {
-    connects.push({ uuid: t.uuid });
-  }} 
-
-  const result = await prisma.note.update({
-    where:{
-        id: Number(id)
-    },
-    data: {
-      title: title,
-      markdown: markdown,
-      tags: {
-        connect: connects,
+  if(method === 'PUT') {
+    if(tags){
+    for (let t of tags) {
+      connects.push({ uuid: t.uuid });
+    }} 
+  
+    const result = await prisma.note.update({
+      where:{
+          id: Number(id)
       },
-    },
-  });
-  res.json(result);
+      data: {
+        title: title,
+        markdown: markdown,
+        tags: {
+          connect: connects,
+        },
+      },
+    });
+    res.json(result);
+  }
 }

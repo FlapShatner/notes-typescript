@@ -1,11 +1,22 @@
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+import rehypeSanitize from "rehype-sanitize";
+import dynamic from "next/dynamic";
 import CreatableSelect from "react-select/Creatable";
 import Link from "next/link";
 
 import {ChangeEvent, FormEvent, useState } from "react";
 
-import Markdown from "./Markdown";
+
 import { NoteData, Tag } from "../pages/create";
 import { v4 as uuidV4 } from "uuid";
+
+
+const MDEditor = dynamic(
+  () => import("@uiw/react-md-editor"),
+  { ssr: false }
+);
+
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
@@ -103,7 +114,16 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) =>
           </div>
         {useEditor?
 
-        <Markdown markdown={markdown} onChange={(e: ChangeEvent<HTMLInputElement>) => setMarkdown(e.target.value)} />
+<div className="mt-2 h-full">
+<MDEditor  
+  previewOptions={{
+    rehypePlugins: [[rehypeSanitize]],
+  }}
+  height={500} 
+  value={markdown} 
+  onChange={setMarkdown}
+  highlightEnable={true} />
+</div>
         :
          <textarea
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setMarkdown(e.target.value)} /> }
