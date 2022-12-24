@@ -1,6 +1,8 @@
 import CreatableSelect from "react-select/Creatable";
 import Link from "next/link";
+
 import {ChangeEvent, FormEvent, useState } from "react";
+
 import Markdown from "./Markdown";
 import { NoteData, Tag } from "../pages/create";
 import { v4 as uuidV4 } from "uuid";
@@ -20,6 +22,7 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) =>
 
   const [title, setTitle] = useState<string>(existingTitle)
   const [markdown, setMarkdown] = useState<string>(existingMarkdown)
+
 
   const [selectedTags, setSelectedTags] = useState<Tag[]>(existingTags);
 
@@ -43,7 +46,9 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) =>
               Title
             </label>
             <input
+
               onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
+
               value={title}
               required
               type="text"
@@ -97,15 +102,13 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) =>
           </button>
           </div>
         {useEditor?
+
         <Markdown markdown={markdown} onChange={(e: ChangeEvent<HTMLInputElement>) => setMarkdown(e.target.value)} />
         :
          <textarea
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setMarkdown(e.target.value)}
-          value={markdown}
-          rows={20}
-          className="mt-2 w-full rounded-md border-gray-300 pr-10 shadow-sm"
-          required
-        /> }
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setMarkdown(e.target.value)} /> }
+        
+ 
 
         <div className="mt-2 flex flex-row gap-2 justify-end">
           <button
