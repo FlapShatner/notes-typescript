@@ -20,6 +20,7 @@ const MDEditor = dynamic(
 );
 
 
+
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
   onAddTag: (tag: Tag) => void;
@@ -128,7 +129,7 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) =>
 </div>
         :
          <textarea
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setMarkdown(e.target.value)} /> }
+          className="w-full mt-1" rows={20} onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setMarkdown(e.target.value)} /> }
         
  
 

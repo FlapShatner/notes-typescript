@@ -13,16 +13,23 @@ export type Note = {
 export type NoteData = {
   title: string;
   markdown: string;
-  tags: Tag[];
+  tags: Tag[];  
 };
+
+type EditProps ={
+  note: Note
+  tags: Tag[]
+}
 
 export type Tag = {
   uuid: string;
   label: string;
 };
 
-function Edit({ tags, note }) {
-  async function onEditNote({ title, markdown, tags }: NoteData) {
+function Edit({ tags, note } : EditProps) {
+  const noteTags = note.tags
+  async function onEditNote( { title, markdown, tags }: NoteData) {
+   
     try {
       const body = { title: title, markdown: markdown, tags: tags };
       await fetch(`/api/content/post/${note.id}`, {
@@ -30,7 +37,7 @@ function Edit({ tags, note }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      await Router.push("/");
+      await Router.push(`/${note.id}`);
     } catch (error) {
       console.error(error);
     }
@@ -57,6 +64,7 @@ function Edit({ tags, note }) {
             <h1 className="text-3xl text-gray-900 sm:text-4xl font-medium">
               {note.title}
             </h1>
+            
           </div>
           <div className=" flex gap-4 mt-0 sm:flex-row sm:items-center">
             <Link href="..">
@@ -78,11 +86,14 @@ function Edit({ tags, note }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const id = ctx.params.id
+    const id = Number(ctx.params.id)
     const tags = await prisma.tag.findMany()
     const note = await prisma.note.findUnique({
         where: {
-            id: Number(id)
+            id: id
+        },
+        include: {
+          tags: true
         }
     })
 

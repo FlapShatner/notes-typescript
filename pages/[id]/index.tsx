@@ -12,6 +12,7 @@ import Button from "../../components/Button";
 import ButtonOutline from "../../components/ButtonOutline";
 import ButtonDelete from "../../components/ButtonDelete";
 
+
 type ReadProps = {
     note:Note
 }
@@ -25,6 +26,8 @@ function Read({note}:ReadProps) {
     const [show, setShow] = useState(false)
     const router = useRouter()
     const {id} = router.query
+    const tags = note.tags
+    console.log(tags)
   return (
     <div className="container max-w-screen-xl  mx-auto">
     <header aria-label="Page Header">
@@ -34,6 +37,14 @@ function Read({note}:ReadProps) {
             <h1 className="text-3xl mt-4 md:mt-0 text-gray-900 sm:text-4xl font-medium">
               {note.title}
             </h1>
+            <div className="flex flex-row gap-2 mt-2" >
+              { tags.map((tag) => {
+                return (<span key={tag.uuid} className="whitespace-nowrap rounded-full  bg-indigo-100 px-2.5 py-0.5 text-sm text-indigo-500">
+
+                {tag.label}
+              </span>)
+              })}
+            </div>
           </div>
           <div className=" flex gap-4  md:flex-row sm:items-center justify-end">
             <Link href="..">
@@ -106,12 +117,20 @@ function DeleteModal ({setShow, noteId}:ModalProps) {
 export default Read
 
 export const getServerSideProps :GetServerSideProps = async (ctx) => {
-    const id = ctx.params.id
+  
+  
+  const id = Number(ctx.params.id)
+  
     const note = await prisma.note.findUnique({
         where: {
-            id: Number(id)
+            id: id
+        },
+        include: {
+          tags: true
         }
     })
+  
+  
 
     return {
         props: {

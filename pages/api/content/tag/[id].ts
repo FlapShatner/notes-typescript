@@ -17,7 +17,7 @@ export default async function handle(
   if(method === "DELETE"){
     const result = await prisma.tag.delete({
       where:{
-        uuid:id
+        uuid:id as string
       }
     })
     res.json(result)
@@ -26,7 +26,7 @@ export default async function handle(
   const {uuid, label}:Tag = req.body
   const result = await prisma.tag.update({
     where:{
-        uuid:id
+        uuid:id as string
     },
     data: {
         uuid:uuid,
