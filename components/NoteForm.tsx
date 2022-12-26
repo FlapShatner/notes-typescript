@@ -4,12 +4,14 @@ import rehypeSanitize from "rehype-sanitize";
 import dynamic from "next/dynamic";
 import CreatableSelect from "react-select/Creatable";
 import Link from "next/link";
+import Button from "./Button";
 
 import {ChangeEvent, FormEvent, useState } from "react";
 
 
 import { NoteData, Tag } from "../pages/create";
 import { v4 as uuidV4 } from "uuid";
+import ButtonOutline from "./ButtonOutline";
 
 
 const MDEditor = dynamic(
@@ -131,19 +133,9 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) =>
  
 
         <div className="mt-2 flex flex-row gap-2 justify-end">
-          <button
-            className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
-            type="submit"
-          >
-            Save
-          </button>
+          <Button >Save</Button>
           <Link href="..">
-            <button
-              className="inline-flex items-center justify-center rounded-lg border border-gray-400 px-5 py-3 text-gray-500 transition hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:ring font-medium text-sm"
-              type="button"
-            >
-              Cancel
-            </button>
+            <ButtonOutline >Cancel</ButtonOutline>
           </Link>
         </div>
       </form>

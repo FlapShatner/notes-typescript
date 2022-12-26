@@ -8,6 +8,9 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import {Note} from '../create'
+import Button from "../../components/Button";
+import ButtonOutline from "../../components/ButtonOutline";
+import ButtonDelete from "../../components/ButtonDelete";
 
 type ReadProps = {
     note:Note
@@ -34,28 +37,19 @@ function Read({note}:ReadProps) {
           </div>
           <div className=" flex gap-4  md:flex-row sm:items-center justify-end">
             <Link href="..">
-              <button
-                className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
-                type="button"
-              >
+              <Button>
                 Back
-              </button>
+              </Button>
             </Link>
             <Link href={`${id}/edit`}>
-            <button
-              className="inline-flex items-center justify-center rounded-lg border border-indigo-400 px-5 py-3 text-indigo-500 transition hover:bg-indigo-50 hover:text-indigo-700 focus:outline-none focus:ring font-medium text-sm"
-              type="button"
-            >
+            <ButtonOutline>
               Edit
-            </button>
+            </ButtonOutline>
             </Link>            
             
-            <button onClick={() => setShow(true)}
-              className="inline-flex items-center justify-center rounded-lg border border-red-400 px-5 py-3 text-red-500 transition hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring font-medium text-sm"
-              type="button"
-            >
+            <ButtonDelete onClick={() => setShow(true)} >
               Delete
-            </button>
+            </ButtonDelete>
             
             
           </div>

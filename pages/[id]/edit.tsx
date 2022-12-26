@@ -4,6 +4,7 @@ import Router from "next/router";
 import { GetServerSideProps } from "next";
 import prisma from "../../lib/prisma";
 import { makeSerializable } from "../../lib/util";
+import Button from "../../components/Button";
 
 export type Note = {
   id: number;
@@ -59,12 +60,7 @@ function Edit({ tags, note }) {
           </div>
           <div className=" flex gap-4 mt-0 sm:flex-row sm:items-center">
             <Link href="..">
-              <button
-                className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
-                type="button"
-              >
-                Back
-              </button>
+              <Button>Back</Button>
             </Link>
           </div>
         </div>
