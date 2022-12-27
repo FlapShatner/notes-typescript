@@ -19,21 +19,16 @@ export type NoteData = {
   id: string;
 };
 
-
 export type Tag = {
   uuid: string;
   label: string;
 };
 
 
-
-
-
-
 function Create({ tags }) {
   const { data: session } = useSession();
   const user= session?.user?.id
-  console.log(session)
+  
   
   async function onCreateNote({ title, markdown, tags }: NoteData) {
     try {
