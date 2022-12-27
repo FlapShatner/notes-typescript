@@ -1,7 +1,17 @@
+import { useSession, signIn, signOut } from "next-auth/react"
 import Button from "./Button";
 import Link from "next/link";
 import ButtonOutline from "./ButtonOutline";
 function Header() {
+  const { data: session } = useSession()
+
+  function handleClick() {
+    if (session) {
+      signOut()
+    } else {
+      signIn()
+    }
+  }
   return (
     <header aria-label="Page Header">
       <div className="mx-auto max-w-screen-xl px-8 py-8 sm:px-20">
@@ -18,6 +28,9 @@ function Header() {
             <Link href="/tags">
               <ButtonOutline>Edit Tags</ButtonOutline>
             </Link>
+            <div onClick={handleClick}>
+              <Button> {session? "Sign Out" : "Sign In"} </Button>
+            </div>
           </div>
         </div>
       </div>
