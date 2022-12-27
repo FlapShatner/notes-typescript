@@ -26,8 +26,10 @@ function Read({note}:ReadProps) {
     const [show, setShow] = useState(false)
     const router = useRouter()
     const {id} = router.query
-    const tags = note.tags
-    console.log(tags)
+    let tags= []
+    if(note?.tags !== null){
+     tags = note?.tags}
+    
   return (
     <div className="container max-w-screen-xl  mx-auto">
     <header aria-label="Page Header">
@@ -35,10 +37,10 @@ function Read({note}:ReadProps) {
         <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-between">
           <div className="text-left">
             <h1 className="text-3xl mt-4 md:mt-0 text-gray-900 sm:text-4xl font-medium">
-              {note.title}
+              {note?.title}
             </h1>
             <div className="flex flex-row gap-2 mt-2" >
-              { tags.map((tag) => {
+              { tags?.map((tag) => {
                 return (<span key={tag.uuid} className="whitespace-nowrap rounded-full  bg-indigo-100 px-2.5 py-0.5 text-sm text-indigo-500">
 
                 {tag.label}
@@ -68,7 +70,7 @@ function Read({note}:ReadProps) {
       </div>
     </header>
     <div className="py-10 px-4 mx-10 md:mx-20">
-    <ReactMarkdown className="prose" remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>{note.markdown}</ReactMarkdown>
+    <ReactMarkdown className="prose" remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>{note?.markdown}</ReactMarkdown>
     </div>
 
     {show && <DeleteModal noteId={id} setShow={() => setShow(false)}/>}
@@ -119,11 +121,11 @@ export default Read
 export const getServerSideProps :GetServerSideProps = async (ctx) => {
   
   
-  const id = Number(ctx.params.id)
+  const id = ctx.params.id
   
     const note = await prisma.note.findUnique({
         where: {
-            id: id
+            id: id as string
         },
         include: {
           tags: true

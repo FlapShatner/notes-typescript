@@ -7,7 +7,7 @@ import { makeSerializable } from "../../lib/util";
 import Button from "../../components/Button";
 
 export type Note = {
-  id: number;
+  id: string;
 } & NoteData;
 
 export type NoteData = {
@@ -86,11 +86,11 @@ function Edit({ tags, note } : EditProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const id = Number(ctx.params.id)
+    const id = ctx.params.id
     const tags = await prisma.tag.findMany()
     const note = await prisma.note.findUnique({
         where: {
-            id: id
+            id: id as string
         },
         include: {
           tags: true

@@ -8,7 +8,7 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { title, markdown, tags }: NoteData = req.body;
+  const { title, markdown, tags, id }: NoteData = req.body;
 
   let connects = [];
   for (let t of tags) {
@@ -19,6 +19,10 @@ export default async function handle(
     data: {
       title: title,
       markdown: markdown,
+      author:{
+        connect: {
+        id:id }
+      },
       tags: {
         connect: connects,
       },

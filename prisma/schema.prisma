@@ -9,19 +9,19 @@ datasource db {
 }
 
 model Note {
-  id        Int      @id @default(autoincrement())
+  id        String      @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
   markdown  String?  @db.VarChar(2000)
   tags      Tag[]
-  author    User  @relation(fields: [authorId], references: [id])
-  authorId  Int
+  author    User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
 }
 
 
 model Tag {
-  id    Int    @id @default(autoincrement())
+  id    String    @id @default(uuid())
   label String @db.VarChar(255)
   uuid  String @unique @db.VarChar(255)
   notes  Note[]
@@ -29,8 +29,8 @@ model Tag {
 
 
 model Account {
-  id                 Int  @id @default(autoincrement())
-  userId             Int  @map("user_id")
+  id                 String  @id @default(uuid())
+  userId             String  @map("user_id")
   type               String
   provider           String
   providerAccountId  String  @map("provider_account_id")
@@ -49,9 +49,9 @@ model Account {
 }
 
 model Session {
-  id           Int   @id @default(autoincrement())
+  id           String   @id @default(uuid())
   sessionToken String   @unique @map("session_token")
-  userId       Int   @map("user_id")
+  userId       String   @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -59,14 +59,14 @@ model Session {
 }
 
 model User {
-  id            Int    @id @default(autoincrement())
+  id            String    @id @default(uuid())
   name          String?
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
   image         String?
   accounts      Account[]
   sessions      Session[]
-  notes         Note[]
+  notes         Note[]  
 
   @@map("users")
 }

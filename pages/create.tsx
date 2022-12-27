@@ -1,3 +1,5 @@
+
+import {useSession} from "next-auth/react";
 import Link from "next/link";
 import NoteForm from "../components/NoteForm";
 import Router from "next/router";
@@ -7,24 +9,35 @@ import { makeSerializable } from "../lib/util";
 import Button from "../components/Button";
 
 export type Note = {
-  id: number;
+  id: string;
 } & NoteData;
 
 export type NoteData = {
   title: string;
   markdown: string;
   tags: Tag[];
+  id: string;
 };
+
 
 export type Tag = {
   uuid: string;
   label: string;
 };
 
+
+
+
+
+
 function Create({ tags }) {
+  const { data: session } = useSession();
+  const user= session?.user?.id
+  console.log(session)
+  
   async function onCreateNote({ title, markdown, tags }: NoteData) {
     try {
-      const body = { title: title, markdown: markdown, tags: tags };
+      const body = { title: title, markdown: markdown, tags: tags, id: user };
       await fetch("/api/content/post", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

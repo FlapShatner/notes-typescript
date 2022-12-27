@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth, {DefaultSession} from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import prisma from "../../../lib/prisma"
@@ -15,7 +15,20 @@ export default NextAuth({
           access_type: "offline",
           response_type: "code"
         }
-      }
+      },
     }),
   ],
+  callbacks: {
+    async session({session, user}){
+      session.user.id = user.id
+      return session
+    }
+  }
 })
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user: {
+      id: string
+    }
+  }
+}
