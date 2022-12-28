@@ -2,14 +2,18 @@ import { FaGoogle } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 
 
 function SignIn() {
     const { data: session } = useSession()
     const router = useRouter()
-    if(session) {
-        router.back()
+    
+
+
+    if(session ) {         
+        router.push('/')
     }
 
   return (
@@ -27,7 +31,7 @@ function SignIn() {
           </button>
         </div>
         <span className="mt-4 text-center">or</span>
-                <button onClick={() => signIn('google', { callbackUrl: '' })} className="bg-indigo-500 text-xs mt-4 sm:text-sm text-white py-2 hover:bg-indigo-600 active:bg-indigo-700">
+                <button onClick={() => signIn('google', { callbackUrl: sessionStorage.getItem("tempNote")? '/create': '/' })} className="bg-indigo-500 text-xs mt-4 sm:text-sm text-white py-2 hover:bg-indigo-600 active:bg-indigo-700">
           <span className="inline-block mr-2  translate-y-0.5">
             <FaGoogle />
           </span>
@@ -37,6 +41,6 @@ function SignIn() {
       </div>
     </div>
   );
-}
+  }
 
 export default SignIn;

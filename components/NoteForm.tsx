@@ -2,48 +2,59 @@ import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import rehypeSanitize from "rehype-sanitize";
 import dynamic from "next/dynamic";
-import CreatableSelect from "react-select/Creatable";
+import CreatableSelect from "react-select/creatable";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import Button from "./Button";
-
-import {ChangeEvent, FormEvent, useState } from "react";
-
+import { useRouter } from "next/router";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 import { NoteData, Tag } from "../pages/create";
 import { v4 as uuidV4 } from "uuid";
 import ButtonOutline from "./ButtonOutline";
+import { useSessionStorage } from "../hooks/useLocalStorage";
 
-
-const MDEditor = dynamic(
-  () => import("@uiw/react-md-editor"),
-  { ssr: false }
-);
-
-
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
   onAddTag: (tag: Tag) => void;
   availableTags: Tag[];
-  note?: NoteData
+  note?: NoteData;
 };
 
-const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) => {
-  const existingTags = note?.tags ?? []
-  const existingTitle = note?.title ?? ""
-  const existingMarkdown = note?.markdown ?? ""  
-  const [useEditor, setUseEditor] = useState(true)
+const NoteForm = ({
+  onSubmit,
+  onAddTag,
+  availableTags,
+  note,
+}: NoteFormProps) => {
+  const router = useRouter();
+  const { data: session } = useSession();
 
-  const [title, setTitle] = useState<string>(existingTitle)
-  const [markdown, setMarkdown] = useState<string>(existingMarkdown)
+  const [noteTemp, setNoteTemp] = useSessionStorage("tempNote", {
+    title: "",
+    markdown: "",
+    tags: [],
+  });
 
+  let existingTags = note?.tags ?? noteTemp.tags ?? [];
+  let existingTitle = note?.title ?? noteTemp.title ?? "";
+  let existingMarkdown = note?.markdown ?? noteTemp.markdown ?? "";
+  const [useEditor, setUseEditor] = useState(true);
+
+  const [title, setTitle] = useState<string>(existingTitle);
+  const [markdown, setMarkdown] = useState<string>(existingMarkdown);
 
   const [selectedTags, setSelectedTags] = useState<Tag[]>(existingTags);
 
-  
-
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (!session) {
+      setNoteTemp({ title: title, markdown: markdown, tags: selectedTags });
+      router.push("/auth/signin");
+    }
+
     onSubmit({
       title: title,
       markdown: markdown,
@@ -60,9 +71,9 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) =>
               Title
             </label>
             <input
-
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
-
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setTitle(e.target.value)
+              }
               value={title}
               required
               type="text"
@@ -74,7 +85,7 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) =>
 
           <div className="flex basis-1/2">
             <CreatableSelect
-            placeholder='Add Tags'
+              placeholder="Add Tags"
               onCreateOption={(label) => {
                 const createdTag = { uuid: uuidV4(), label: label };
                 onAddTag(createdTag);
@@ -111,32 +122,40 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) =>
           </div>
         </div>
         <div className="mt-2 flex justify-end">
-        <button className="text-black bg-gray-200 px-1" type="button"  onClick={() => setUseEditor(!useEditor)}>
-          {useEditor?'Use Plain Text Editor': 'Use Markdown Editor'}
+          <button
+            className="text-black bg-gray-200 px-1"
+            type="button"
+            onClick={() => setUseEditor(!useEditor)}
+          >
+            {useEditor ? "Use Plain Text Editor" : "Use Markdown Editor"}
           </button>
+        </div>
+        {useEditor ? (
+          <div className="mt-2 h-full">
+            <MDEditor
+              previewOptions={{
+                rehypePlugins: [[rehypeSanitize]],
+              }}
+              height={500}
+              value={markdown}
+              onChange={setMarkdown}
+              highlightEnable={true}
+            />
           </div>
-        {useEditor?
-
-<div className="mt-2 h-full">
-<MDEditor  
-  previewOptions={{
-    rehypePlugins: [[rehypeSanitize]],
-  }}
-  height={500} 
-  value={markdown} 
-  onChange={setMarkdown}
-  highlightEnable={true} />
-</div>
-        :
-         <textarea
-          className="w-full mt-1" rows={20} onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setMarkdown(e.target.value)} /> }
-        
- 
+        ) : (
+          <textarea
+            className="w-full mt-1"
+            rows={20}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              setMarkdown(e.target.value)
+            }
+          />
+        )}
 
         <div className="mt-2 flex flex-row gap-2 justify-end">
-          <Button >Save</Button>
+          <Button>Save</Button>
           <Link href="..">
-            <ButtonOutline >Cancel</ButtonOutline>
+            <ButtonOutline>Cancel</ButtonOutline>
           </Link>
         </div>
       </form>
