@@ -68,7 +68,7 @@ function Edit({ tags, note } : EditProps) {
           </div>
           <div className=" flex gap-4 mt-0 sm:flex-row sm:items-center">
             <Link href="..">
-              <Button>Back</Button>
+              <Button>Back?</Button>
             </Link>
           </div>
         </div>
