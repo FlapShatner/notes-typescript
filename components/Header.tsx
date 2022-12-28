@@ -2,14 +2,16 @@ import { useSession, signIn, signOut } from "next-auth/react"
 import Button from "./Button";
 import Link from "next/link";
 import ButtonOutline from "./ButtonOutline";
+import {useRouter} from "next/router"
 function Header() {
   const { data: session } = useSession()
+  const router = useRouter()
 
   function handleClick() {
     if (session) {
       signOut()
     } else {
-      signIn()
+      router.push("/auth/signin")
     }
   }
   return (

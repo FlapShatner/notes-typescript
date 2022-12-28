@@ -30,8 +30,8 @@ type NoteFormProps = {
 
 const NoteForm = ({ onSubmit, onAddTag, availableTags, note }: NoteFormProps) => {
   const existingTags = note?.tags ?? []
-  const existingTitle = note?.title ?? null
-  const existingMarkdown = note?.markdown ?? null  
+  const existingTitle = note?.title ?? ""
+  const existingMarkdown = note?.markdown ?? ""  
   const [useEditor, setUseEditor] = useState(true)
 
   const [title, setTitle] = useState<string>(existingTitle)
