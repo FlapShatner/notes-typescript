@@ -16,7 +16,7 @@ export default async function handle(
   if(method === 'DELETE'){
       const result = await prisma.note.delete({
         where: {
-          id: id
+          id: id as string
         }
       })
       res.json(result)
@@ -34,7 +34,7 @@ export default async function handle(
   
     const result = await prisma.note.update({
       where:{
-          id: id
+          id: id as string
       },
       data: {
         title: title,
