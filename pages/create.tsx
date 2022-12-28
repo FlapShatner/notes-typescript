@@ -1,18 +1,22 @@
+
+import {useSession } from "next-auth/react";
 import Link from "next/link";
 import NoteForm from "../components/NoteForm";
 import Router from "next/router";
 import { GetServerSideProps } from "next";
 import prisma from "../lib/prisma";
 import { makeSerializable } from "../lib/util";
+import Button from "../components/Button";
+import { useRouter } from "next/router";
 
 export type Note = {
-  id: number;
+  id: string;
 } & NoteData;
 
 export type NoteData = {
   title: string;
   markdown: string;
-  tags: Tag[];
+  tags: Tag[];  
 };
 
 export type Tag = {
@@ -20,10 +24,20 @@ export type Tag = {
   label: string;
 };
 
+
 function Create({ tags }) {
+  const { data: session } = useSession();
+  const user = session?.user?.id
+  const router = useRouter();
+  
+  
   async function onCreateNote({ title, markdown, tags }: NoteData) {
+    if(!user){
+      router.push('/auth/signin')
+   
+  } else{
     try {
-      const body = { title: title, markdown: markdown, tags: tags };
+      const body = { title: title, markdown: markdown, tags: tags, id: user };
       await fetch("/api/content/post", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -33,6 +47,8 @@ function Create({ tags }) {
     } catch (error) {
       console.error(error);
     }
+  }
+
   }
 
   async function addTag({ label, uuid }: Tag) {
@@ -59,12 +75,7 @@ function Create({ tags }) {
           </div>
           <div className=" flex gap-4 mt-0 sm:flex-row sm:items-center">
             <Link href="..">
-              <button
-                className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
-                type="button"
-              >
-                Back
-              </button>
+              <Button>Back</Button>
             </Link>
           </div>
         </div>

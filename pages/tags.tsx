@@ -2,6 +2,7 @@ import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { ChangeEvent } from "react";
 import { useState } from "react";
+import Button from "../components/Button";
 import prisma from "../lib/prisma";
 import { makeSerializable } from "../lib/util";
 import { Tag } from "./create";
@@ -44,12 +45,9 @@ function EditTags({ allTags }: EditProps) {
                 Edit Tags
               </h3>
               <Link href="..">
-                <button
-                  className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
-                  type="button"
-                >
+                <Button>
                   {isDone? "Done": "Back"}
-                </button>
+                </Button>
               </Link>
             </div>
             <div className="mt-4 flex flex-col  gap-1">

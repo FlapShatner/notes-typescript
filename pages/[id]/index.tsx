@@ -8,6 +8,10 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import {Note} from '../create'
+import Button from "../../components/Button";
+import ButtonOutline from "../../components/ButtonOutline";
+import ButtonDelete from "../../components/ButtonDelete";
+
 
 type ReadProps = {
     note:Note
@@ -22,6 +26,10 @@ function Read({note}:ReadProps) {
     const [show, setShow] = useState(false)
     const router = useRouter()
     const {id} = router.query
+    let tags= []
+    if(note?.tags !== null){
+     tags = note?.tags}
+    
   return (
     <div className="container max-w-screen-xl  mx-auto">
     <header aria-label="Page Header">
@@ -29,33 +37,32 @@ function Read({note}:ReadProps) {
         <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-between">
           <div className="text-left">
             <h1 className="text-3xl mt-4 md:mt-0 text-gray-900 sm:text-4xl font-medium">
-              {note.title}
+              {note?.title}
             </h1>
+            <div className="flex flex-row gap-2 mt-2" >
+              { tags?.map((tag) => {
+                return (<span key={tag.uuid} className="whitespace-nowrap rounded-full  bg-indigo-100 px-2.5 py-0.5 text-sm text-indigo-500">
+
+                {tag.label}
+              </span>)
+              })}
+            </div>
           </div>
           <div className=" flex gap-4  md:flex-row sm:items-center justify-end">
             <Link href="..">
-              <button
-                className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
-                type="button"
-              >
+              <Button>
                 Back
-              </button>
+              </Button>
             </Link>
             <Link href={`${id}/edit`}>
-            <button
-              className="inline-flex items-center justify-center rounded-lg border border-indigo-400 px-5 py-3 text-indigo-500 transition hover:bg-indigo-50 hover:text-indigo-700 focus:outline-none focus:ring font-medium text-sm"
-              type="button"
-            >
+            <ButtonOutline>
               Edit
-            </button>
+            </ButtonOutline>
             </Link>            
             
-            <button onClick={() => setShow(true)}
-              className="inline-flex items-center justify-center rounded-lg border border-red-400 px-5 py-3 text-red-500 transition hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring font-medium text-sm"
-              type="button"
-            >
+            <ButtonDelete onClick={() => setShow(true)} >
               Delete
-            </button>
+            </ButtonDelete>
             
             
           </div>
@@ -63,7 +70,7 @@ function Read({note}:ReadProps) {
       </div>
     </header>
     <div className="py-10 px-4 mx-10 md:mx-20">
-    <ReactMarkdown className="prose" remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>{note.markdown}</ReactMarkdown>
+    <ReactMarkdown className="prose" remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>{note?.markdown}</ReactMarkdown>
     </div>
 
     {show && <DeleteModal noteId={id} setShow={() => setShow(false)}/>}
@@ -112,12 +119,20 @@ function DeleteModal ({setShow, noteId}:ModalProps) {
 export default Read
 
 export const getServerSideProps :GetServerSideProps = async (ctx) => {
-    const id = ctx.params.id
+  
+  
+  const id = ctx.params.id
+  
     const note = await prisma.note.findUnique({
         where: {
-            id: Number(id)
+            id: id as string
+        },
+        include: {
+          tags: true
         }
     })
+  
+  
 
     return {
         props: {

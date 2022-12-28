@@ -8,6 +8,9 @@ import { makeSerializable } from "../lib/util";
 import SearchInput from "../components/SearchInput";
 import SelectBox from "../components/SelectBox";
 import { useMemo } from "react";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
+
 
 type Props = {
   notes: Note[];
@@ -15,27 +18,36 @@ type Props = {
 };
 
 export default function Home({ notes, allTags }: Props) {
-  
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([])
-  const [query, setQuery] = useState('')
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [query, setQuery] = useState("");
 
-  const filteredNotes = useMemo(() =>{
-    return notes.filter(note =>{
-      return(query === '' || note.title.toLowerCase().includes(
-        query.toLowerCase())) && (selectedTags.length === 0 ||
-          selectedTags.every(tag => note.tags.some(noteTag => noteTag.uuid === tag.uuid)))
-    })
-  },[query, selectedTags, notes])
-
-
+  const filteredNotes = useMemo(() => {
+    return notes?.filter((note) => {
+      return (
+        (query === "" ||
+          note.title.toLowerCase().includes(query.toLowerCase())) &&
+        (selectedTags.length === 0 ||
+          selectedTags.every((tag) =>
+            note.tags.some((noteTag) => noteTag.uuid === tag.uuid)
+          ))
+      );
+    });
+  }, [query, selectedTags, notes]);
 
   return (
     <>
       <div className="container mx-auto max-w-screen-xl">
         <Header />
         <div className="lg:mx-20 mx-4 gap-2 md:gap-6 flex flex-row">
-          <SearchInput query={query} setQuery={(query:string) => setQuery(query)} />
-          <SelectBox setSelectedTags={(tags:Tag[]) => setSelectedTags(tags)} selectedTags={selectedTags} allTags={allTags} />
+          <SearchInput
+            query={query}
+            setQuery={(query: string) => setQuery(query)}
+          />
+          <SelectBox
+            setSelectedTags={(tags: Tag[]) => setSelectedTags(tags)}
+            selectedTags={selectedTags}
+            allTags={allTags}
+          />
         </div>
         <NotesList notes={filteredNotes} />
       </div>
@@ -43,13 +55,32 @@ export default function Home({ notes, allTags }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const notes = await prisma.note.findMany({ include: { tags: true } });
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+  const user = session?.user?.id;
+if(!user) return {props: {notes: [], allTags: []}}
+  const currentUser = await prisma.user?.findUnique({
+    where: {
+      id: user,
+    },
+    include: {
+      notes: {
+        include: {
+          tags: true,
+        },
+      },
+    },
+  });
+
   const allTags = await prisma.tag.findMany();
 
   return {
     props: {
-      notes: makeSerializable(notes),
+      notes: makeSerializable(currentUser.notes),
       allTags: makeSerializable(allTags),
     },
   };
