@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import Button from "./Button";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useState } from "react";
+import Editor from "./Editor";
 
 import { NoteData, Tag } from "../pages/create";
 import { v4 as uuidV4 } from "uuid";
@@ -61,6 +62,9 @@ const NoteForm = ({
       tags: selectedTags,
     });
   }
+
+  const Editor = dynamic(() => import("./Editor"), { ssr: false });
+
 
   return (
     <>
@@ -130,6 +134,7 @@ const NoteForm = ({
             {useEditor ? "Use Plain Text Editor" : "Use Markdown Editor"}
           </button>
         </div>
+        <Editor />
         {useEditor ? (
           <div className="mt-2 h-full">
             <MDEditor

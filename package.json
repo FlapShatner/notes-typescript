@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-balloon": "^35.4.0",
+    "@ckeditor/ckeditor5-react": "^5.0.5",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@prisma/client": "^4.8.0",
     "@react-hookz/web": "^20.0.3",
@@ -17,6 +19,7 @@
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.9",
     "@uiw/react-md-editor": "^3.6.0",
+    "ckeditor5-custom-build": "file:ckeditor",
     "eslint": "8.29.0",
     "eslint-config-next": "13.0.6",
     "next": "13.0.6",
