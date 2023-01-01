@@ -1,29 +1,54 @@
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import BalloonEditor from '@ckeditor/ckeditor5-build-balloon';
+import dynamic from "next/dynamic";
+import { useCallback, useState } from "react";
 
-const Editor = () => {
+const Editor = ({markdown, setMarkdown}) => {
+
+    const QuillNoSSRWrapper = dynamic(import('react-quill'), {	
+        ssr: false,
+        loading: () => <p>Loading ...</p>,
+        })
+    
+      const MemoQuill = useCallback(QuillNoSSRWrapper,[]);
+    
+        const modules = {
+          toolbar: [
+            [{ font: [] }],
+            [{ header: [1, 2, 3, 4, false] }],
+            ["bold", "italic", "underline", "strike"],
+            [{ color: [] }, { background: [] }],
+            [{ script:  "sub" }, { script:  "super" }],
+            ["blockquote", "code-block"],
+            [{ list:  "ordered" }, { list:  "bullet" }],
+            [{ indent:  "-1" }, { indent:  "+1" }, { align: [] }],
+            ["link", "image"],
+            ["clean"],
+          ]
+        }
+
+        
+
+      
+
+     const handleChange = (content, delta, source, editor) => {
+        setMarkdown(editor.getContents());        
+     }  
+
+     if (typeof window === "undefined") {
+        return <p>Loading...</p>
+     }
+
+     
+      
     return (
-        <CKEditor
-            editor={ BalloonEditor }
-            data="<p>Hello from CKEditor 5!</p>"
-            onReady={ editor => {
-                // You can store the "editor" and use when it is needed.
-                console.log( 'Editor is ready to use!', editor );
-            } }
-            onChange={ ( event, editor ) => {
-                const data = editor.getData();
-                console.log( { event, editor, data } );
-            }
-}
-            onBlur={ ( event, editor ) => {
-                console.log( 'Blur.', editor );
-            } } 
-            onFocus={ ( event, editor ) => {
-                console.log( 'Focus.', editor );
-            }
-}
+       <>
+        <MemoQuill 
+        theme="snow"
+        modules={modules}
+        defaultValue={markdown}
+        onChange={handleChange}
         />
-    );
+       </>
+    )
 };
 
 export default Editor;

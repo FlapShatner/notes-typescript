@@ -1,21 +1,14 @@
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
-import rehypeSanitize from "rehype-sanitize";
-import dynamic from "next/dynamic";
 import CreatableSelect from "react-select/creatable";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import Button from "./Button";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useState } from "react";
-import Editor from "./Editor";
-
 import { NoteData, Tag } from "../pages/create";
 import { v4 as uuidV4 } from "uuid";
 import ButtonOutline from "./ButtonOutline";
 import { useSessionStorage } from "../hooks/useLocalStorage";
-
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
+import Editor from "./Editor";
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
@@ -33,11 +26,18 @@ const NoteForm = ({
   const router = useRouter();
   const { data: session } = useSession();
 
+
+
+  
+
   const [noteTemp, setNoteTemp] = useSessionStorage("tempNote", {
     title: "",
-    markdown: "",
+    markdown: '',
     tags: [],
   });
+
+  const delta = note?  JSON.parse(note?.markdown) : null
+ 
 
   let existingTags = note?.tags ?? noteTemp.tags ?? [];
   let existingTitle = note?.title ?? noteTemp.title ?? "";
@@ -49,21 +49,28 @@ const NoteForm = ({
 
   const [selectedTags, setSelectedTags] = useState<Tag[]>(existingTags);
 
+
+
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!session) {
       setNoteTemp({ title: title, markdown: markdown, tags: selectedTags });
       router.push("/auth/signin");
     }
-
+    
     onSubmit({
       title: title,
-      markdown: markdown,
+      markdown: JSON.stringify(markdown),
       tags: selectedTags,
     });
   }
 
-  const Editor = dynamic(() => import("./Editor"), { ssr: false });
+  if (typeof window === "undefined") {
+    return null;
+  }
+ 
+
+
 
 
   return (
@@ -133,19 +140,10 @@ const NoteForm = ({
           >
             {useEditor ? "Use Plain Text Editor" : "Use Markdown Editor"}
           </button>
-        </div>
-        <Editor />
+        </div>       
         {useEditor ? (
           <div className="mt-2 h-full">
-            <MDEditor
-              previewOptions={{
-                rehypePlugins: [[rehypeSanitize]],
-              }}
-              height={500}
-              value={markdown}
-              onChange={setMarkdown}
-              highlightEnable={true}
-            />
+            <Editor markdown={delta} setMarkdown={setMarkdown} />           
           </div>
         ) : (
           <textarea

@@ -1,5 +1,7 @@
 import { SessionProvider } from "next-auth/react";
+import 'react-quill/dist/quill.snow.css'
 import "../styles/globals.css";
+
 
 import type { AppProps } from "next/app";
 

@@ -1,16 +1,14 @@
 import { GetServerSideProps } from "next";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import prisma from "../../lib/prisma";
 import { makeSerializable } from "../../lib/util";
 import Link from 'next/link'
 import Router, { useRouter } from "next/router";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
 import {Note} from '../create'
 import Button from "../../components/Button";
 import ButtonOutline from "../../components/ButtonOutline";
 import ButtonDelete from "../../components/ButtonDelete";
+import dynamic from "next/dynamic";
 
 
 type ReadProps = {
@@ -29,6 +27,19 @@ function Read({note}:ReadProps) {
     let tags= []
     if(note?.tags !== null){
      tags = note?.tags}
+
+        
+     const QuillNoSSRWrapper = dynamic(import('react-quill'), {	
+      ssr: false,
+      loading: () => <p>Loading ...</p>,})
+      
+
+     const modules = {
+        toolbar: false,
+     }
+
+     
+     
     
   return (
     <div className="container max-w-screen-xl  mx-auto">
@@ -70,7 +81,7 @@ function Read({note}:ReadProps) {
       </div>
     </header>
     <div className="py-10 px-4 mx-10 md:mx-20">
-    <ReactMarkdown className="prose" remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>{note?.markdown}</ReactMarkdown>
+    <QuillNoSSRWrapper modules={modules} readOnly={true} value={note?.markdown ? JSON.parse(note?.markdown): '' } />
     </div>
 
     {show && <DeleteModal noteId={id} setShow={() => setShow(false)}/>}
