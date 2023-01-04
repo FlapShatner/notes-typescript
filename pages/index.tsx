@@ -38,10 +38,6 @@ export default function Home({ notes, allTags }: Props) {
     });
   }, [query, selectedTags, notes]);
 
- 
- 
-
-
   return (
     <>
       <div className="container mx-auto max-w-screen-xl">

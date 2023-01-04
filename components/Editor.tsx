@@ -1,8 +1,8 @@
 import dynamic from "next/dynamic";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { Loader } from "./Loader";
 
-const Editor = ({ markdown, setMarkdown }) => {
+const Editor = ({ markdown, setMarkdown, bg }) => {
   const QuillNoSSRWrapper = dynamic(import("react-quill"), {
     ssr: false,
     loading: () => <Loader />,
@@ -24,6 +24,12 @@ const Editor = ({ markdown, setMarkdown }) => {
       ["clean"],
     ],
   };
+
+  useEffect(() => {    
+      const style = document.createElement("style");
+      style.innerHTML = `.ql-editor { background-color: ${bg} !important; }`;
+      document.body.appendChild(style);
+  }, [bg])
 
   const handleChange = (content, delta, source, editor) => {
     setMarkdown(editor.getContents());

@@ -17,7 +17,7 @@ export type NoteData = {
   title: string;
   markdown: string;
   tags: Tag[];
-  color?: string;  
+  color: string;  
 };
 
 export type Tag = {
@@ -32,13 +32,13 @@ function Create({ tags }) {
   const router = useRouter();
   
   
-  async function onCreateNote({ title, markdown, tags }: NoteData) {
+  async function onCreateNote({ title, markdown, tags, color }: NoteData) {
     if(!user){
       router.push('/auth/signin')
    
   } else{
     try {
-      const body = { title: title, markdown: markdown, tags: tags, id: user };
+      const body = { title: title, markdown: markdown, color:color, tags: tags, id: user };
       await fetch("/api/content/post", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

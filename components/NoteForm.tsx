@@ -31,6 +31,7 @@ const NoteForm = ({
     title: "",
     markdown: "",
     tags: [],
+    color: "",
   });
 
   
@@ -45,13 +46,14 @@ const NoteForm = ({
   let existingTags = note?.tags ?? noteTemp.tags ?? [];
   let existingTitle = note?.title ?? noteTemp.title ?? "";
   let existingMarkdown = note?.markdown ?? noteTemp.markdown ?? "";
+  let existingColor = note?.color ?? noteTemp.color ?? "indigo";
 
   const [title, setTitle] = useState<string>(existingTitle);
   const [markdown, setMarkdown] = useState<string>(existingMarkdown);
 
   const [selectedTags, setSelectedTags] = useState<Tag[]>(existingTags);
 
-  const [selected, setSelected] = useState<string>('indigo');
+  const [selected, setSelected] = useState<string>(existingColor);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -59,6 +61,7 @@ const NoteForm = ({
       setNoteTemp({
         title: title,
         markdown: JSON.stringify(markdown),
+        color: selected,
         tags: selectedTags,
       });
       router.push("/auth/signin");
@@ -137,7 +140,7 @@ const NoteForm = ({
         <div className="mt-2 flex justify-end"></div>
         <div className="mt-2 h-full">
           { typeof window !== 'undefined' &&
-            <Editor markdown={delta} setMarkdown={setMarkdown} />
+            <Editor bg={selected} markdown={delta} setMarkdown={setMarkdown} />
 }
         </div>
         <div className="mt-2 flex flex-row gap-2 justify-end">

@@ -13,6 +13,7 @@ export type Note = {
 export type NoteData = {
   title: string;
   markdown: string;
+  color:string;
   tags: Tag[];  
 };
 
@@ -28,10 +29,10 @@ export type Tag = {
 
 function Edit({ tags, note } : EditProps) {
   const noteTags = note.tags
-  async function onEditNote( { title, markdown, tags }: NoteData) {
+  async function onEditNote( { title, markdown, tags, color }: NoteData) {
    
     try {
-      const body = { title: title, markdown: markdown, tags: tags };
+      const body = { title: title, markdown: markdown, color:color, tags: tags };
       await fetch(`/api/content/post/${note.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

@@ -8,14 +8,15 @@ type Data = {
   title: string;
   markdown: string;
   tags: Tag[];
-  id: string; 
+  id: string;
+  color: string;
 };
 
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { title, markdown, tags, id }: Data = req.body;
+  const { title, markdown, tags, id, color }: Data = req.body;
 
   let connects = [];
   for (let t of tags) {
@@ -26,6 +27,7 @@ export default async function handle(
     data: {
       title: title,
       markdown: markdown,
+      color: color,
       author:{
         connect: {
         id:id }

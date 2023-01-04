@@ -23,7 +23,7 @@ export default async function handle(
   }
   // PUT /api/content/post/[id]
 
-  const { title, markdown, tags }: NoteData = req.body;
+  const { title, markdown, tags, color }: NoteData = req.body;
   let connects = [];
 
   if(method === 'PUT') {
@@ -39,6 +39,7 @@ export default async function handle(
       data: {
         title: title,
         markdown: markdown,
+        color:color,
         tags: {
           connect: connects,
         },
