@@ -9,8 +9,7 @@ import { v4 as uuidV4 } from "uuid";
 import ButtonOutline from "./ButtonOutline";
 import { useSessionStorage } from "../hooks/useLocalStorage";
 import NoSSR from "./NoSSR";
-// import Editor from "./Editor";
-import dynamic from "next/dynamic";
+import Editor from "./Editor";
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
@@ -34,10 +33,7 @@ const NoteForm = ({
     tags: [],
   });
 
-  const Editor = dynamic(() => import("./Editor"), {
-    ssr: false,
-    loading: () => <div>Loading...</div>,
-  });
+  
 
 
   const delta = note
