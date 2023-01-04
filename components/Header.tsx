@@ -1,7 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/react"
-import Button from "./Button";
+import Button from "./buttons/Button";
 import Link from "next/link";
-import ButtonOutline from "./ButtonOutline";
+import ButtonOutline from "./buttons/ButtonOutline";
 import {useRouter} from "next/router"
 function Header() {
   const { data: session } = useSession()
@@ -25,13 +25,13 @@ function Header() {
           </div>
           <div className=" flex gap-4 mt-0 sm:flex-row sm:items-center">
             <Link href="/create">
-              <Button> Create</Button>
+              <Button > Create</Button>
             </Link>
             <Link href="/tags">
-              <ButtonOutline>Edit Tags</ButtonOutline>
+              <ButtonOutline >Edit Tags</ButtonOutline>
             </Link>
             <div onClick={handleClick}>
-              <Button> {session? "Sign Out" : "Sign In"} </Button>
+              <Button > {session? "Sign Out" : "Sign In"} </Button>
             </div>
           </div>
         </div>

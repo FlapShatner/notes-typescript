@@ -5,3 +5,7 @@
 export function makeSerializable<T extends any>(o: T): T {
   return JSON.parse(JSON.stringify(o));
 }
+
+export function getRandomInt(max:number): number {
+  return Math.floor(Math.random() * max);
+}

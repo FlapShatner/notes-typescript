@@ -4,7 +4,7 @@ import Router from "next/router";
 import { GetServerSideProps } from "next";
 import prisma from "../../lib/prisma";
 import { makeSerializable } from "../../lib/util";
-import Button from "../../components/Button";
+import Button from "../../components/buttons/Button";
 
 export type Note = {
   id: string;

@@ -6,7 +6,7 @@ import Router from "next/router";
 import { GetServerSideProps } from "next";
 import prisma from "../lib/prisma";
 import { makeSerializable } from "../lib/util";
-import Button from "../components/Button";
+import Button from "../components/buttons/Button";
 import { useRouter } from "next/router";
 
 export type Note = {
@@ -16,7 +16,8 @@ export type Note = {
 export type NoteData = {
   title: string;
   markdown: string;
-  tags: Tag[];  
+  tags: Tag[];
+  color?: string;  
 };
 
 export type Tag = {
@@ -75,11 +76,12 @@ function Create({ tags }) {
           </div>
           <div className=" flex gap-4 mt-0 sm:flex-row sm:items-center">
             <Link href="..">
-              <Button>Back</Button>
+              <Button >Back</Button>
             </Link>
           </div>
         </div>
       </div>
+      
       <div className="mx-auto">
         <NoteForm
           onAddTag={addTag}

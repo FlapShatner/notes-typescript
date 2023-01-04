@@ -2,7 +2,7 @@ import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { ChangeEvent } from "react";
 import { useState } from "react";
-import Button from "../components/Button";
+import Button from "../components/buttons/Button";
 import prisma from "../lib/prisma";
 import { makeSerializable } from "../lib/util";
 import { Tag } from "./create";

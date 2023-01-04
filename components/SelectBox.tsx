@@ -23,6 +23,7 @@ const SelectBox = ({allTags, selectedTags ,setSelectedTags}:Props) => {
           control: (base) => ({
             ...base,
             borderRadius: "0.375rem",
+            backgroundColor: "#fafaf9",
           }),
         }}
         value={selectedTags.map(tag => {return{label:tag.label, value:tag.uuid}})}

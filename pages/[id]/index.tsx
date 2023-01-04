@@ -5,9 +5,9 @@ import { makeSerializable } from "../../lib/util";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import { Note } from "../create";
-import Button from "../../components/Button";
-import ButtonOutline from "../../components/ButtonOutline";
-import ButtonDelete from "../../components/ButtonDelete";
+import Button from "../../components/buttons/Button";
+import ButtonOutline from "../../components/buttons/ButtonOutline";
+import ButtonDelete from "../../components/buttons/ButtonDelete";
 import { Loader } from "../../components/Loader";
 import dynamic from "next/dynamic";
 

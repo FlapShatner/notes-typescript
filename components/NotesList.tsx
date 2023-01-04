@@ -7,6 +7,7 @@ type Props = {
 
 const NotesList: React.FC<Props> = ({notes}) => {
     
+   
 
 if(!notes){
     return <h3>loading...</h3>

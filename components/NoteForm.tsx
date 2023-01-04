@@ -1,15 +1,15 @@
 import CreatableSelect from "react-select/creatable";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import Button from "./Button";
+import Button from "./buttons/Button"
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { NoteData, Tag } from "../pages/create";
 import { v4 as uuidV4 } from "uuid";
-import ButtonOutline from "./ButtonOutline";
+import ButtonOutline from "./buttons/ButtonOutline";
 import { useSessionStorage } from "../hooks/useLocalStorage";
-import NoSSR from "./NoSSR";
 import Editor from "./Editor";
+import Color from "./Color";
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
@@ -51,6 +51,8 @@ const NoteForm = ({
 
   const [selectedTags, setSelectedTags] = useState<Tag[]>(existingTags);
 
+  const [selected, setSelected] = useState<string>('indigo');
+
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!session) {
@@ -68,6 +70,7 @@ const NoteForm = ({
       title: title,
       markdown: JSON.stringify(markdown),
       tags: selectedTags,
+      color: selected,
     });
   }
 
@@ -130,6 +133,7 @@ const NoteForm = ({
             />
           </div>
         </div>
+        <Color setSelected={setSelected} />
         <div className="mt-2 flex justify-end"></div>
         <div className="mt-2 h-full">
           { typeof window !== 'undefined' &&
@@ -137,7 +141,9 @@ const NoteForm = ({
 }
         </div>
         <div className="mt-2 flex flex-row gap-2 justify-end">
-          <Button>Save</Button>
+          <div onClick={handleSubmit}>
+          <Button >Save</Button>
+          </div>
           <Link href="..">
             <ButtonOutline>Cancel</ButtonOutline>
           </Link>

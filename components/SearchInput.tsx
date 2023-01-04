@@ -18,7 +18,7 @@ const SearchInput = ({query, setQuery}: SearchProps) => {
         type="text"
         id="search"
         placeholder="Filter by Title"
-        className="w-full rounded-md border-gray-300 pr-10 shadow-sm text-sm"
+        className="w-full rounded-md bg-stone-50 border-gray-300 pr-10 shadow-sm text-sm hover:bg-white hover:border-gray-400 transition ease-in-out"
       />
 
       <span className="pointer-events-none absolute inset-y-0 right-0 grid w-10 place-content-center text-gray-500">
