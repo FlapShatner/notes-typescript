@@ -8,7 +8,9 @@ import { NoteData, Tag } from "../pages/create";
 import { v4 as uuidV4 } from "uuid";
 import ButtonOutline from "./ButtonOutline";
 import { useSessionStorage } from "../hooks/useLocalStorage";
-import Editor from "./Editor";
+import NoSSR from "./NoSSR";
+// import Editor from "./Editor";
+import dynamic from "next/dynamic";
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
@@ -26,52 +28,52 @@ const NoteForm = ({
   const router = useRouter();
   const { data: session } = useSession();
 
-
-
-  
-
   const [noteTemp, setNoteTemp] = useSessionStorage("tempNote", {
     title: "",
-    markdown: '',
+    markdown: "",
     tags: [],
   });
 
-  const delta = note?  JSON.parse(note?.markdown) : null
- 
+  const Editor = dynamic(() => import("./Editor"), {
+    ssr: false,
+    loading: () => <div>Loading...</div>,
+  });
+
+
+  const delta = note
+    ? JSON.parse(note?.markdown)
+    : noteTemp.markdown
+    ? JSON.parse(noteTemp.markdown)
+    : null;
 
   let existingTags = note?.tags ?? noteTemp.tags ?? [];
   let existingTitle = note?.title ?? noteTemp.title ?? "";
   let existingMarkdown = note?.markdown ?? noteTemp.markdown ?? "";
-  const [useEditor, setUseEditor] = useState(true);
 
   const [title, setTitle] = useState<string>(existingTitle);
   const [markdown, setMarkdown] = useState<string>(existingMarkdown);
 
   const [selectedTags, setSelectedTags] = useState<Tag[]>(existingTags);
 
-
-
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!session) {
-      setNoteTemp({ title: title, markdown: markdown, tags: selectedTags });
+      setNoteTemp({
+        title: title,
+        markdown: JSON.stringify(markdown),
+        tags: selectedTags,
+      });
       router.push("/auth/signin");
     }
-    
+
+    sessionStorage.clear();
+
     onSubmit({
       title: title,
       markdown: JSON.stringify(markdown),
       tags: selectedTags,
     });
   }
-
-  if (typeof window === "undefined") {
-    return null;
-  }
- 
-
-
-
 
   return (
     <>
@@ -132,29 +134,12 @@ const NoteForm = ({
             />
           </div>
         </div>
-        <div className="mt-2 flex justify-end">
-          <button
-            className="text-black bg-gray-200 px-1"
-            type="button"
-            onClick={() => setUseEditor(!useEditor)}
-          >
-            {useEditor ? "Use Plain Text Editor" : "Use Markdown Editor"}
-          </button>
-        </div>       
-        {useEditor ? (
-          <div className="mt-2 h-full">
-            <Editor markdown={delta} setMarkdown={setMarkdown} />           
-          </div>
-        ) : (
-          <textarea
-            className="w-full mt-1"
-            rows={20}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-              setMarkdown(e.target.value)
-            }
-          />
-        )}
-
+        <div className="mt-2 flex justify-end"></div>
+        <div className="mt-2 h-full">
+          { typeof window !== 'undefined' &&
+            <Editor markdown={delta} setMarkdown={setMarkdown} />
+}
+        </div>
         <div className="mt-2 flex flex-row gap-2 justify-end">
           <Button>Save</Button>
           <Link href="..">

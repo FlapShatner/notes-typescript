@@ -7,12 +7,15 @@ import prisma from "../lib/prisma";
 import { makeSerializable } from "../lib/util";
 import SearchInput from "../components/SearchInput";
 import SelectBox from "../components/SelectBox";
+
 import { useMemo } from "react";
+
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 
-type Props = {
+
+type Props = {  
   notes: Note[];
   allTags: Tag[];
 };
@@ -20,6 +23,7 @@ type Props = {
 export default function Home({ notes, allTags }: Props) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [query, setQuery] = useState("");
+  
 
   const filteredNotes = useMemo(() => {
     return notes?.filter((note) => {
@@ -33,6 +37,10 @@ export default function Home({ notes, allTags }: Props) {
       );
     });
   }, [query, selectedTags, notes]);
+
+ 
+ 
+
 
   return (
     <>
@@ -49,6 +57,7 @@ export default function Home({ notes, allTags }: Props) {
             allTags={allTags}
           />
         </div>
+       
         <NotesList notes={filteredNotes} />
       </div>
     </>
@@ -78,10 +87,12 @@ if(!user) return {props: {notes: [], allTags: []}}
 
   const allTags = await prisma.tag.findMany();
 
+
   return {
     props: {
       notes: makeSerializable(currentUser.notes),
       allTags: makeSerializable(allTags),
     },
   };
+  
 };
