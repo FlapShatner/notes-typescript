@@ -65,7 +65,7 @@ function Create({ tags }) {
 
   return (
     <div className="container max-w-screen-xl mx-auto">
-      <div className="mx-auto max-w-screen-xl px-8 py-8 sm:px-20">
+      <div className=" max-w-screen-xl py-8 lg:px-0 mx-4 lg:mx-20">
         <div className="flex items-center justify-between">
           <div className="text-left">
             <h1 className="text-3xl text-gray-900 sm:text-4xl font-medium">

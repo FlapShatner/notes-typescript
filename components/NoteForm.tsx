@@ -137,13 +137,13 @@ const NoteForm = ({
           </div>
         </div>
         <Color setSelected={setSelected} />
-        <div className="mt-2 flex justify-end"></div>
-        <div className="mt-2 h-full">
+        
+        <div className="mt-4 h-full">
           { typeof window !== 'undefined' &&
             <Editor bg={selected} markdown={delta} setMarkdown={setMarkdown} />
 }
         </div>
-        <div className="mt-2 flex flex-row gap-2 justify-end">
+        <div className="mt-4 flex flex-row gap-2 justify-end">
           <div onClick={handleSubmit}>
           <Button >Save</Button>
           </div>
