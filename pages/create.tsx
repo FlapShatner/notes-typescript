@@ -16,8 +16,8 @@ export type Note = {
 export type NoteData = {
   title: string;
   markdown: string;
+  color: string;
   tags: Tag[];
-  color: string;  
 };
 
 export type Tag = {
@@ -30,7 +30,6 @@ function Create({ tags }) {
   const { data: session } = useSession();
   const user = session?.user?.id
   const router = useRouter();
-  
   
   async function onCreateNote({ title, markdown, tags, color }: NoteData) {
     if(!user){
@@ -49,7 +48,6 @@ function Create({ tags }) {
       console.error(error);
     }
   }
-
   }
 
   async function addTag({ label, uuid }: Tag) {

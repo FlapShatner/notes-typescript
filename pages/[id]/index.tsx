@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import prisma from "../../lib/prisma";
 import { makeSerializable } from "../../lib/util";
 import Link from "next/link";
@@ -25,12 +25,21 @@ function Read({ note }: ReadProps) {
   const [show, setShow] = useState(false);
   const router = useRouter();
   const { id } = router.query;
+  const bg = note?.color;
   let tags = [];
   if (note?.tags !== null) {
     tags = note?.tags;
   }
 
   const QuillNoSSRWrapper =  useMemo(() => dynamic(() => import('react-quill'), { ssr: false,loading: () => <Loader /> }),[]);
+
+  
+    useEffect(() => {    
+      const style = document.createElement("style");
+      style.innerHTML = `.ql-editor { background-color: ${bg} !important; }`;
+      document.body.appendChild(style);
+  }, [bg])
+
 
   const modules = {
     toolbar: false,

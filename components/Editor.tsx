@@ -8,10 +8,12 @@ const Editor = ({ markdown, setMarkdown, bg }) => {
     loading: () => <Loader />,
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const MemoQuill = useCallback(QuillNoSSRWrapper, []);
 
   const modules = {
-    toolbar: [
+    toolbar:{
+      container: [
       [{ font: [] }],
       [{ header: [1, 2, 3, 4, false] }],
       ["bold", "italic", "underline", "strike"],
@@ -20,9 +22,11 @@ const Editor = ({ markdown, setMarkdown, bg }) => {
       ["blockquote", "code-block"],
       [{ list: "ordered" }, { list: "bullet" }],
       [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
-      ["link", "image"],
+      ["link"],
       ["clean"],
     ],
+  }
+    
   };
 
   useEffect(() => {    
@@ -30,6 +34,8 @@ const Editor = ({ markdown, setMarkdown, bg }) => {
       style.innerHTML = `.ql-editor { background-color: ${bg} !important; }`;
       document.body.appendChild(style);
   }, [bg])
+
+  
 
   const handleChange = (content, delta, source, editor) => {
     setMarkdown(editor.getContents());

@@ -1,14 +1,15 @@
 export const colors = 
-    ["#fca5a5",
-    "#fdba74",
-    "#fde047",
-    "#bef264",
-    "#6ee7b7",
-    "#67e8f9",
-   "#93c5fd",
-   "#a5b4fc",
-    "#c4b5fd",
-    "#f0abfc",
-    "#fda4af",
-    "#a3a3a3"
+    [
+    "#fecaca",
+    "#fed7aa",
+    "#fef08a",
+    "#d9f99d",
+    "#a7f3d0",
+    "#a5f3fc",
+    "#bfdbfe",
+    "#c7d2fe",
+    "#ddd6fe",
+    "#f5d0fe",
+    "#fecdd3",
+    "#e7e5e4"
   ]
