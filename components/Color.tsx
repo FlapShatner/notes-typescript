@@ -7,11 +7,11 @@ const Color = ({setSelected}) => {
     setSelected(e.target.id) 
     
 
-    document.getElementById(e.target.id).className = `w-5 h-5  m-1 rounded-md outline outline-2 outline-offset-1 outline-blue-600`
+    document.getElementById(e.target.id).className = `w-5 h-5  m-1 rounded-md outline outline-2 outline-offset-1 outline-blue-600 border border-gray-500`
     
     colors.map((color) => { 
         if (color !== e.target.id) {
-            document.getElementById(color).className = `w-5 h-5 m-1 rounded-md`
+            document.getElementById(color).className = `w-5 h-5 m-1 rounded-md border border-gray-500`
         }
     })
   } 
@@ -30,7 +30,7 @@ const Color = ({setSelected}) => {
                     onClick={handleClick}
                     key={color}
                     id={color}
-                    className={`w-5 h-5 m-1 rounded-md`}
+                    className={`w-5 h-5 m-1 rounded-md border border-gray-500`}
                     style={{ backgroundColor: `${color}` }}
                 />
             ))

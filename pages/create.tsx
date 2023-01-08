@@ -16,8 +16,8 @@ export type Note = {
 export type NoteData = {
   title: string;
   markdown: string;
+  color: string;
   tags: Tag[];
-  color: string;  
 };
 
 export type Tag = {
@@ -30,7 +30,6 @@ function Create({ tags }) {
   const { data: session } = useSession();
   const user = session?.user?.id
   const router = useRouter();
-  
   
   async function onCreateNote({ title, markdown, tags, color }: NoteData) {
     if(!user){
@@ -49,7 +48,11 @@ function Create({ tags }) {
       console.error(error);
     }
   }
+  }
 
+  const back = () => {
+    localStorage.removeItem("tempNote");
+    Router.push("/")
   }
 
   async function addTag({ label, uuid }: Tag) {
@@ -67,7 +70,7 @@ function Create({ tags }) {
 
   return (
     <div className="container max-w-screen-xl mx-auto">
-      <div className="mx-auto max-w-screen-xl px-8 py-8 sm:px-20">
+      <div className=" max-w-screen-xl py-8 lg:px-0 mx-4 lg:mx-20">
         <div className="flex items-center justify-between">
           <div className="text-left">
             <h1 className="text-3xl text-gray-900 sm:text-4xl font-medium">
@@ -75,9 +78,9 @@ function Create({ tags }) {
             </h1>
           </div>
           <div className=" flex gap-4 mt-0 sm:flex-row sm:items-center">
-            <Link href="..">
+            <div onClick={back}>
               <Button >Back</Button>
-            </Link>
+            </div>
           </div>
         </div>
       </div>

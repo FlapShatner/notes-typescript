@@ -1,5 +1,6 @@
 import { Note, Tag } from "../pages/create";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import NotesList from "../components/NotesList";
 import { GetServerSideProps } from "next";
@@ -24,6 +25,14 @@ export default function Home({ notes, allTags }: Props) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [query, setQuery] = useState("");
   
+  const router = useRouter();
+
+  useEffect(() => {
+    if(localStorage.getItem('tempNote')){
+      router.push('/create')
+    }
+  })
+ 
 
   const filteredNotes = useMemo(() => {
     return notes?.filter((note) => {
@@ -40,7 +49,7 @@ export default function Home({ notes, allTags }: Props) {
 
   return (
     <>
-      <div className="container mx-auto max-w-screen-xl">
+      <div className="container mx-auto max-w-screen-xl ">
         <Header />
         <div className="lg:mx-20 mx-4 gap-2 md:gap-6 flex flex-row">
           <SearchInput

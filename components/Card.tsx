@@ -3,7 +3,6 @@ import { Note} from "../pages/create"
 
 export type CardProps = {
     note: Note
-   
 }
 
 const Card = ({note} : CardProps) => {
@@ -17,7 +16,6 @@ const Card = ({note} : CardProps) => {
             <div className="flex flex-wrap gap-2 mt-4 justify-end">
                 {tags && tags.map((tag) => {
                   return (<span key={tag.uuid} className="whitespace-nowrap rounded-full  bg-indigo-100 px-2.5 py-0.5 text-sm text-indigo-500">
-
                     {tag.label}
                   </span>)
                 })}      

@@ -11,19 +11,19 @@ function Header() {
     if (session) {
       signOut()
     } else {
-      router.push("/auth/signin")
+      signIn()
     }
   }
   return (
     <header aria-label="Page Header">
-      <div className="mx-auto max-w-screen-xl px-8 py-8 sm:px-20">
-        <div className="flex items-center justify-between">
-          <div className="text-left">
-            <h1 className="text-3xl text-gray-900 sm:text-4xl font-medium">
+      <div className="mx-auto lg:mx-20 max-w-screen-xl px-4 lg:px-0 py-8 ">
+        <div className="flex flex-col sm:flex-row items-center justify-between">
+          <div className="mr-auto mb-6 sm:mb-0">
+            <h1 className="text-4xl text-gray-900 font-medium">
               Notes
             </h1>
           </div>
-          <div className=" flex gap-4 mt-0 sm:flex-row sm:items-center">
+          <div className="flex flex-row justify-between mt-0 gap-6 sm:gap-4 sm:items-center">
             <Link href="/create">
               <Button > Create</Button>
             </Link>

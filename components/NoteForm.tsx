@@ -1,5 +1,4 @@
 import CreatableSelect from "react-select/creatable";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
 import Button from "./buttons/Button"
 import { useRouter } from "next/router";
@@ -7,7 +6,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { NoteData, Tag } from "../pages/create";
 import { v4 as uuidV4 } from "uuid";
 import ButtonOutline from "./buttons/ButtonOutline";
-import { useSessionStorage } from "../hooks/useLocalStorage";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 import Editor from "./Editor";
 import Color from "./Color";
 
@@ -27,7 +26,7 @@ const NoteForm = ({
   const router = useRouter();
   const { data: session } = useSession();
 
-  const [noteTemp, setNoteTemp] = useSessionStorage("tempNote", {
+  const [noteTemp, setNoteTemp] = useLocalStorage("tempNote", {
     title: "",
     markdown: "",
     tags: [],
@@ -67,7 +66,10 @@ const NoteForm = ({
       router.push("/auth/signin");
     }
 
-    sessionStorage.clear();
+    
+
+
+    localStorage.removeItem("tempNote");
 
     onSubmit({
       title: title,
@@ -75,6 +77,11 @@ const NoteForm = ({
       tags: selectedTags,
       color: selected,
     });
+  }
+
+  const handleCancel = () => {
+    localStorage.removeItem("tempNote");
+    router.push("/");
   }
 
   return (
@@ -137,19 +144,19 @@ const NoteForm = ({
           </div>
         </div>
         <Color setSelected={setSelected} />
-        <div className="mt-2 flex justify-end"></div>
-        <div className="mt-2 h-full">
+        
+        <div className="mt-4 h-full">
           { typeof window !== 'undefined' &&
             <Editor bg={selected} markdown={delta} setMarkdown={setMarkdown} />
 }
         </div>
-        <div className="mt-2 flex flex-row gap-2 justify-end">
+        <div className="mt-4 flex flex-row gap-2 justify-end">
           <div onClick={handleSubmit}>
           <Button >Save</Button>
           </div>
-          <Link href="..">
-            <ButtonOutline>Cancel</ButtonOutline>
-          </Link>
+          <div onClick={handleCancel}>
+            <ButtonOutline >Cancel</ButtonOutline>
+            </div>
         </div>
       </form>
     </>

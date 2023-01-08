@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import prisma from "../../lib/prisma";
 import { makeSerializable } from "../../lib/util";
 import Link from "next/link";
@@ -25,12 +25,21 @@ function Read({ note }: ReadProps) {
   const [show, setShow] = useState(false);
   const router = useRouter();
   const { id } = router.query;
+  const bg = note?.color;
   let tags = [];
   if (note?.tags !== null) {
     tags = note?.tags;
   }
 
   const QuillNoSSRWrapper =  useMemo(() => dynamic(() => import('react-quill'), { ssr: false,loading: () => <Loader /> }),[]);
+
+  
+    useEffect(() => {    
+      const style = document.createElement("style");
+      style.innerHTML = `.ql-editor { background-color: ${bg} !important; }`;
+      document.body.appendChild(style);
+  }, [bg])
+
 
   const modules = {
     toolbar: false,
@@ -42,7 +51,7 @@ function Read({ note }: ReadProps) {
         <div className="mx-auto px-10 py-8 md:px-20 ">
           <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-between">
             <div className="text-left">
-              <h1 className="text-3xl mt-4 md:mt-0 text-gray-900 sm:text-4xl font-medium">
+              <h1 className="text-3xl mt-6 md:mt-0 text-gray-900 sm:text-4xl font-medium">
                 {note?.title}
               </h1>
               <div className="flex flex-row gap-2 mt-2">
@@ -71,7 +80,7 @@ function Read({ note }: ReadProps) {
           </div>
         </div>
       </header>
-      <div className="py-10 px-4 mx-10 md:mx-20">
+      <div className="py-0 sm:py-10 px-4 mx-10 md:mx-20">
         { typeof window !== "undefined" &&
         <QuillNoSSRWrapper
           modules={modules}
