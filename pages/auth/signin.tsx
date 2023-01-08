@@ -47,7 +47,7 @@ function SignIn() {
   return (
     <>
       <div className="container mx-auto pt-24 flex justify-center text-center">
-        <div className="border-2 border-primary-500 mx-4 border-dashed rounded-lg py-8 w-screen md:max-w-md">
+        <div className="border-4 border-primary-500 mx-4 border-dashed rounded-lg py-8 w-screen md:max-w-md">
        {error !== '' && <div className="bg-red-200 text-red-900">{error}</div>}
           <div className="w-fit text-primary-500 border-primary-500 mx-auto mb-4">
             <BiUser size={"6rem"} />
