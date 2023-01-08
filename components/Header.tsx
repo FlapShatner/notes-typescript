@@ -11,7 +11,7 @@ function Header() {
     if (session) {
       signOut()
     } else {
-      router.push("/auth/signin")
+      signIn()
     }
   }
   return (

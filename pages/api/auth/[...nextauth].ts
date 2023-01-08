@@ -1,7 +1,9 @@
-import NextAuth, {DefaultSession} from "next-auth"
+import NextAuth, {DefaultSession, Theme} from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
+import EmailProvider from "next-auth/providers/email"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import prisma from "../../../lib/prisma"
+import {customVerificationRequest} from '../../../lib/email'
 
 export const authOptions = ({
   adapter: PrismaAdapter(prisma),
@@ -17,7 +19,25 @@ export const authOptions = ({
         }
       },
     }),
+    EmailProvider({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST,
+        port: process.env.EMAIL_SERVER_PORT,
+        auth: {
+          user: process.env.EMAIL_SERVER_USER,
+          pass: process.env.EMAIL_SERVER_PASSWORD
+        }
+      },
+      from: process.env.EMAIL_FROM,
+      sendVerificationRequest({ identifier, url, provider }) {
+        customVerificationRequest({ identifier, url, provider })
+      },
+    }),
   ],
+  pages:{
+    verifyRequest: '/auth/verifyRequest',
+    signIn: '/auth/signin'
+  },
   callbacks: {
     async session({session, user}){
       session.user.id = user.id

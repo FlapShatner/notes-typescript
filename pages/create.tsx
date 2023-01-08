@@ -50,6 +50,11 @@ function Create({ tags }) {
   }
   }
 
+  const back = () => {
+    localStorage.removeItem("tempNote");
+    Router.push("/")
+  }
+
   async function addTag({ label, uuid }: Tag) {
     try {
       const body = { label: label, uuid: uuid };
@@ -73,9 +78,9 @@ function Create({ tags }) {
             </h1>
           </div>
           <div className=" flex gap-4 mt-0 sm:flex-row sm:items-center">
-            <Link href="..">
+            <div onClick={back}>
               <Button >Back</Button>
-            </Link>
+            </div>
           </div>
         </div>
       </div>
