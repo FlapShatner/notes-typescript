@@ -9,7 +9,7 @@ Tags can be added to the notes to use as filters, or there's a search function t
 
 Data is all stored on a postgresql database so it can be persisted indefinitely.
 
-NextAuth is being used with the Google 0Auth provider and the sessions and user info are stored in the database. I plan to add more providers for more sign in options.
+NextAuth is being used with the Google OAuth provider and the sessions and user info are stored in the database. I plan to add more providers for more sign in options.
 
 
 ## Installation
@@ -40,7 +40,7 @@ npx prisma migrate dev
 ```
 [Prisma Docs](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases-typescript-postgres) are helpful here
 
-For NextAuth, you'll need your Google 0Auth clientId and secret to add to the .env file you create.
+For NextAuth, you'll need your Google OAuth clientId and secret to add to the .env file you create.
 [NextAuth](https://next-auth.js.org/providers/google) has a pretty detailed walkthrough
 
 
