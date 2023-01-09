@@ -25,6 +25,7 @@ module.exports = {
       sans: ["Poppins", "sans-serif"],
       serif: ["Lora", "serif"],
       mono: ["Incosolata", "monospace"],
+      mont:[ "Montserrat", "sans-serif"]
     },
   },
   plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
