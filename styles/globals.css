@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+:root{
+  --clr-primary: #20609d;
+  --clr-bg:#f5f5f4;
+  --font-mont: "Montserrat", sans-serif;
+  --shadow-sm:2px 10px 23px -10px rgba(0,0,0,0.86);
+  --shadow-lg:2px 10px 20px -5px rgba(0,0,0,0.80);
+}
 *,
 *::before,
 *::after {
@@ -12,6 +19,7 @@
 
 * {
   margin: 0;
+
 }
 
 html,
@@ -21,11 +29,12 @@ body {
 
 body {
   line-height: 1.5;
-  min-height: 100vh;
+  min-height: 90vh;
   -webkit-font-smoothing: antialiased;
   font-family: "Poppins", sans-serif;
   background: #f5f5f4;
-  ;
+  overflow-x: hidden;
+  
 }
 
 img,

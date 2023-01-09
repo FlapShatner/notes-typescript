@@ -11,6 +11,7 @@ export const authOptions = ({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      wellKnown: "https://accounts.google.com/.well-known/openid-configuration",
       authorization: {
         params: {
           prompt: "consent",
@@ -18,6 +19,10 @@ export const authOptions = ({
           response_type: "code"
         }
       },
+      userinfo: {
+        url: "https://openidconnect.googleapis.com/v1/userinfo",
+        params: {scope: "openid email profile"}
+      }
     }),
     EmailProvider({
       server: {
@@ -49,6 +54,8 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string
+      image?: string
+      email?: string
     }
   }
 }
