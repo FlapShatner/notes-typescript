@@ -27,10 +27,25 @@ export default async function handle(
   let connects = [];
 
   if(method === 'PUT') {
-    if(tags){
+    
     for (let t of tags) {
       connects.push({ uuid: t.uuid });
-    }} 
+    }
+  
+   
+
+   
+
+    await prisma.note.update({
+      where: {
+        id: id as string
+      },
+      data: {
+        tags: {
+          set: []
+        }
+      }
+    })   
   
     const result = await prisma.note.update({
       where:{

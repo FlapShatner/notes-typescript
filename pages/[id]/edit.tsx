@@ -47,7 +47,7 @@ function Edit({ tags, note } : EditProps) {
   async function addTag({ label, uuid }: Tag) {
     try {
       const body = { label: label, uuid: uuid };
-      await fetch("api/content/tag", {
+      await fetch("/api/content/tag", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
