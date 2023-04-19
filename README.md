@@ -2,10 +2,12 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Notes App
 
-This is a super basic TypeScript project I'm building for fun and practice.
+This is a super basic TypeScript project.
 
-Create new notes on the "Create" page and view them on the Main page.
-Tags can be added to the notes to use as filters, or there's a search function to find specific notes by title.
+A user can sign into their account using their Google account, or by clicking a link in an email. 
+
+Create new notes on the "Create" page using a fully featured WYSIWYG editor, and then view them on the Main page.
+Notes can be filtered by tags which can be added, and the notes are searchable by title. Notes can be edited and deleted. 
 
 Data is all stored on a postgresql database so it can be persisted indefinitely.
 
@@ -13,6 +15,8 @@ NextAuth is being used with the Google OAuth provider and the sessions and user 
 
 
 ## Installation
+
+If you don't already have node.js installed on your machine, download and install it [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) (v.18 or higher)
 
 Clone this repository and install node modules
 
