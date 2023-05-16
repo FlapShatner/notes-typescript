@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, Suspense } from "react";
 import { Loader } from "./Loader";
 
 const Editor = ({ markdown, setMarkdown, bg }) => {
@@ -12,30 +12,27 @@ const Editor = ({ markdown, setMarkdown, bg }) => {
   const MemoQuill = useCallback(QuillNoSSRWrapper, []);
 
   const modules = {
-    toolbar:{
+    toolbar: {
       container: [
-      [{ font: [] }],
-      [{ header: [1, 2, 3, 4, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ color: [] }, { background: [] }],
-      [{ script: "sub" }, { script: "super" }],
-      ["blockquote", "code-block"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
-      ["link"],
-      ["clean"],
-    ],
-  }
-    
+        [{ font: [] }],
+        [{ header: [1, 2, 3, 4, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ color: [] }, { background: [] }],
+        [{ script: "sub" }, { script: "super" }],
+        ["blockquote", "code-block"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+        ["link"],
+        ["clean"],
+      ],
+    },
   };
 
-  useEffect(() => {    
-      const style = document.createElement("style");
-      style.innerHTML = `.ql-editor { background-color: ${bg} !important; }`;
-      document.body.appendChild(style);
-  }, [bg])
-
-  
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `.ql-editor { background-color: var(--${bg}) !important; }`;
+    document.body.appendChild(style);
+  }, [bg]);
 
   const handleChange = (content, delta, source, editor) => {
     setMarkdown(editor.getContents());
@@ -43,12 +40,14 @@ const Editor = ({ markdown, setMarkdown, bg }) => {
 
   return (
     <>
-      <MemoQuill
-        theme="snow"
-        modules={modules}
-        defaultValue={markdown}
-        onChange={handleChange}
-      />
+      <Suspense fallback={<Loader />}>
+        <MemoQuill
+          theme="snow"
+          modules={modules}
+          defaultValue={markdown}
+          onChange={handleChange}
+        />
+      </Suspense>
     </>
   );
 };

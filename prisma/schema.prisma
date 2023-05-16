@@ -15,7 +15,7 @@ model Note {
   title     String   @db.VarChar(255)
   markdown  String?  @db.VarChar(2000)
   tags      Tag[]
-  color     String?  @db.VarChar(255)
+  color     String  @db.VarChar(255) @default("inherit")
   author    User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
 }

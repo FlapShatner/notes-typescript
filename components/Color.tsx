@@ -1,42 +1,37 @@
-
 import { colors } from "../colors";
 
-const Color = ({setSelected}) => {
-
+const Color = ({ setSelected }) => {
   const handleClick = (e) => {
-    setSelected(e.target.id) 
-    
+    setSelected(e.target.id);
 
-    document.getElementById(e.target.id).className = `w-5 h-5  m-1 rounded-md outline outline-2 outline-offset-1 outline-blue-600 border border-gray-500`
-    
-    colors.map((color) => { 
-        if (color !== e.target.id) {
-            document.getElementById(color).className = `w-5 h-5 m-1 rounded-md border border-gray-500`
-        }
-    })
-  } 
+    document.getElementById(
+      e.target.id
+    ).className = `w-5 h-5  m-1 rounded-md outline outline-2 outline-offset-1 outline-blue-600 border border-gray-500 ${e.target.id}`;
 
+    colors.map((color) => {
+      if (color !== e.target.id) {
+        document.getElementById(
+          color
+        ).className = `w-5 h-5 m-1 rounded-md border border-gray-500 ${color}`;
+      }
+    });
+  };
 
   return (
-    <div                
-      className="cursor-pointer flex flex-row items-center  border border-gray-400 bg-stone-50 mt-4 w-max pl-2 text-gray-500 rounded-lg relative ml-auto " 
-    >
+    <div className="cursor-pointer flex flex-row items-center  border border-gray-400 bg-stone-50 mt-4 w-max pl-2 text-gray-500 rounded-lg relative ml-auto ">
       <div className="border-r-2 border-r-gray-400 pr-1">Color</div>
-          
-       
-          <div className="flex flex-row px-1">
-            {colors.map((color) => (
-                <div
-                    onClick={handleClick}
-                    key={color}
-                    id={color}
-                    className={`w-5 h-5 m-1 rounded-md border border-gray-500`}
-                    style={{ backgroundColor: `${color}` }}
-                />
-            ))
-            }
 
-            {/* <div className="w-5 h-5 bg-red-400 m-1 rounded-md outline outline-2 outline-offset-1 outline-stone-500" />
+      <div className="flex flex-row px-1">
+        {colors.map((color) => (
+          <div
+            onClick={handleClick}
+            key={color}
+            id={color}
+            className={`w-5 h-5 m-1 rounded-md border border-gray-500 ${color}`}
+          />
+        ))}
+
+        {/* <div className="w-5 h-5 bg-red-400 m-1 rounded-md outline outline-2 outline-offset-1 outline-stone-500" />
             <div className="w-5 h-5 bg-orange-400 m-1 rounded-md" />
             <div className="w-5 h-5 bg-yellow-400 m-1 rounded-md" /> 
             <div className="w-5 h-5 bg-lime-400 m-1 rounded-md" />
@@ -49,8 +44,7 @@ const Color = ({setSelected}) => {
             <div className="w-5 h-5 bg-rose-400 m-1 rounded-md" />          
             <div className="w-5 h-5 bg-stone-400 m-1 rounded-md" />          
             </div> */}
-                
-    </div>
+      </div>
     </div>
   );
 };

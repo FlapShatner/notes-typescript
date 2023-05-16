@@ -1,20 +1,20 @@
+import { useId } from "react";
 import Select from "react-select";
 import { Tag } from "../pages/create";
 
 type Props = {
-  allTags:Tag[]
-  setSelectedTags:(tag:Tag[])=> void
-  selectedTags:Tag[]
-}
+  allTags: Tag[];
+  setSelectedTags: (tag: Tag[]) => void;
+  selectedTags: Tag[];
+};
 
-const SelectBox = ({allTags, selectedTags ,setSelectedTags}:Props) => {
-  
-
+const SelectBox = ({ allTags, selectedTags, setSelectedTags }: Props) => {
   return (
     <div className="flex basis-1/2">
       <Select
-      placeholder='Filter by tags'
+        placeholder="Filter by tags"
         isMulti
+        instanceId={useId()}
         styles={{
           container: (base) => ({
             ...base,
@@ -26,11 +26,19 @@ const SelectBox = ({allTags, selectedTags ,setSelectedTags}:Props) => {
             backgroundColor: "#fafaf9",
           }),
         }}
-        value={selectedTags.map(tag => {return{label:tag.label, value:tag.uuid}})}
-        onChange={tags => setSelectedTags(tags.map(tag => {
-          return {label:tag.label, uuid:tag.value}
-        }))}
-        options={allTags.map(tag => {return {label:tag.label, value:tag.uuid}})}
+        value={selectedTags.map((tag) => {
+          return { label: tag.label, value: tag.uuid };
+        })}
+        onChange={(tags) =>
+          setSelectedTags(
+            tags.map((tag) => {
+              return { label: tag.label, uuid: tag.value };
+            })
+          )
+        }
+        options={allTags.map((tag) => {
+          return { label: tag.label, value: tag.uuid };
+        })}
       />
     </div>
   );

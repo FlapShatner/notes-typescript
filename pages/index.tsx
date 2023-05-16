@@ -14,9 +14,7 @@ import { useMemo } from "react";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 
-
-
-type Props = {  
+type Props = {
   notes: Note[];
   allTags: Tag[];
 };
@@ -24,15 +22,14 @@ type Props = {
 export default function Home({ notes, allTags }: Props) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [query, setQuery] = useState("");
-  
+
   const router = useRouter();
 
-  useEffect(() => {
-    if(localStorage.getItem('tempNote')){
-      router.push('/create')
-    }
-  })
- 
+  // useEffect(() => {
+  //   if(localStorage.getItem('tempNote')){
+  //     router.push('/create')
+  //   }
+  // })
 
   const filteredNotes = useMemo(() => {
     return notes?.filter((note) => {
@@ -62,7 +59,7 @@ export default function Home({ notes, allTags }: Props) {
             allTags={allTags}
           />
         </div>
-       
+
         <NotesList notes={filteredNotes} />
       </div>
     </>
@@ -76,7 +73,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     authOptions
   );
   const user = session?.user?.id;
-if(!user) return {props: {notes: [], allTags: []}}
+  if (!user) return { props: { notes: [], allTags: [] } };
   const currentUser = await prisma.user?.findUnique({
     where: {
       id: user,
@@ -92,12 +89,10 @@ if(!user) return {props: {notes: [], allTags: []}}
 
   const allTags = await prisma.tag.findMany();
 
-
   return {
     props: {
       notes: makeSerializable(currentUser.notes),
       allTags: makeSerializable(allTags),
     },
   };
-  
 };

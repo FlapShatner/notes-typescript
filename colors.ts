@@ -1,16 +1,15 @@
-export const colors = 
-    [
-    "#fafaf9",
-    "#fecaca",
-    "#fed7aa",
-    "#fef08a",
-    "#d9f99d",
-    "#a7f3d0",
-    "#a5f3fc",
-    "#bfdbfe",
-    "#c7d2fe",
-    "#ddd6fe",
-    "#f5d0fe",
-    "#fecdd3",
-    "#e7e5e4"
-  ]
+export const colors = [
+  "bg-clr-default",
+  "bg-clr-red",
+  "bg-clr-orange",
+  "bg-clr-yellow",
+  "bg-clr-lime",
+  "bg-clr-emerald",
+  "bg-clr-cyan",
+  "bg-clr-blue",
+  "bg-clr-indigo",
+  "bg-clr-violet",
+  "bg-clr-fuchsia",
+  "bg-clr-rose",
+  "bg-clr-stone",
+];

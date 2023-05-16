@@ -11,7 +11,6 @@ import ButtonDelete from "../../components/buttons/ButtonDelete";
 import { Loader } from "../../components/Loader";
 import dynamic from "next/dynamic";
 
-
 type ReadProps = {
   note: Note;
 };
@@ -31,15 +30,20 @@ function Read({ note }: ReadProps) {
     tags = note?.tags;
   }
 
-  const QuillNoSSRWrapper =  useMemo(() => dynamic(() => import('react-quill'), { ssr: false,loading: () => <Loader /> }),[]);
+  const QuillNoSSRWrapper = useMemo(
+    () =>
+      dynamic(() => import("react-quill"), {
+        ssr: false,
+        loading: () => <Loader />,
+      }),
+    []
+  );
 
-  
-    useEffect(() => {    
-      const style = document.createElement("style");
-      style.innerHTML = `.ql-editor { background-color: ${bg} !important; }`;
-      document.body.appendChild(style);
-  }, [bg])
-
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `.ql-editor { background-color: ${bg} !important; }`;
+    document.body.appendChild(style);
+  }, [bg]);
 
   const modules = {
     toolbar: false,
@@ -68,7 +72,7 @@ function Read({ note }: ReadProps) {
               </div>
             </div>
             <div className=" flex gap-4  md:flex-row sm:items-center justify-end">
-              <Link href="..">
+              <Link href="/">
                 <Button>Back</Button>
               </Link>
               <Link href={`${id}/edit`}>
@@ -81,12 +85,13 @@ function Read({ note }: ReadProps) {
         </div>
       </header>
       <div className="py-0 sm:py-10 px-4 mx-10 md:mx-20">
-        { typeof window !== "undefined" &&
-        <QuillNoSSRWrapper
-          modules={modules}
-          readOnly={true}
-          value={note?.markdown ? JSON.parse(note?.markdown) : ""}
-        />}
+        {typeof window !== "undefined" && (
+          <QuillNoSSRWrapper
+            modules={modules}
+            readOnly={true}
+            value={note?.markdown ? JSON.parse(note?.markdown) : ""}
+          />
+        )}
       </div>
 
       {show && <DeleteModal noteId={id} setShow={() => setShow(false)} />}

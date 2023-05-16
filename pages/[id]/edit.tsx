@@ -1,6 +1,6 @@
 import Link from "next/link";
 import NoteForm from "../../components/NoteForm";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import prisma from "../../lib/prisma";
 import { makeSerializable } from "../../lib/util";
@@ -13,26 +13,32 @@ export type Note = {
 export type NoteData = {
   title: string;
   markdown: string;
-  color:string;
-  tags: Tag[];  
+  color: string;
+  tags: Tag[];
 };
 
-type EditProps ={
-  note: Note
-  tags: Tag[]
-}
+type EditProps = {
+  note: Note;
+  tags: Tag[];
+};
 
 export type Tag = {
   uuid: string;
   label: string;
 };
 
-function Edit({ tags, note } : EditProps) {
-  const noteTags = note.tags
-  async function onEditNote( { title, markdown, tags, color }: NoteData) {
-   
+function Edit({ tags, note }: EditProps) {
+  const router = useRouter();
+  const { id } = router.query;
+  const noteTags = note.tags;
+  async function onEditNote({ title, markdown, tags, color }: NoteData) {
     try {
-      const body = { title: title, markdown: markdown, color:color, tags: tags };
+      const body = {
+        title: title,
+        markdown: markdown,
+        color: color,
+        tags: tags,
+      };
       await fetch(`/api/content/post/${note.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -65,10 +71,9 @@ function Edit({ tags, note } : EditProps) {
             <h1 className="text-3xl text-gray-900 sm:text-4xl font-medium">
               {note.title}
             </h1>
-            
           </div>
           <div className=" flex gap-4 mt-0 sm:flex-row sm:items-center">
-            <Link href="..">
+            <Link href={`/${id}`}>
               <Button>Back?</Button>
             </Link>
           </div>
@@ -87,23 +92,23 @@ function Edit({ tags, note } : EditProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const id = ctx.params.id
-    const tags = await prisma.tag.findMany()
-    const note = await prisma.note.findUnique({
-        where: {
-            id: id as string
-        },
-        include: {
-          tags: true
-        }
-    })
+  const id = ctx.params.id;
+  const tags = await prisma.tag.findMany();
+  const note = await prisma.note.findUnique({
+    where: {
+      id: id as string,
+    },
+    include: {
+      tags: true,
+    },
+  });
 
-    return {
-        props: {
-            note: makeSerializable(note),
-            tags: makeSerializable(tags)
-        }
-}
+  return {
+    props: {
+      note: makeSerializable(note),
+      tags: makeSerializable(tags),
+    },
+  };
 };
 
 export default Edit;
